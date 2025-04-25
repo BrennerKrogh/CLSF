@@ -1,0 +1,3 @@
+To run the virtual environment run in this directory:
+python -m venv/bin/activate
+
