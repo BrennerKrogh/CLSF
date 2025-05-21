@@ -26,5 +26,5 @@ if (typeof window !== "undefined") {
 }
 
 
-export { app, analytics, auth };
+export { app, analytics, auth, db};
 
