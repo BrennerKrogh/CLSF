@@ -3,6 +3,7 @@
 
 import { useState } from 'react';
 import GroupCard from './GroupCard';
+import {fetchGroupData} from '../../../firebase';
 
 // This is mock data that would typically come from a backend API
 const mockGroups = [
@@ -76,6 +77,23 @@ const mockGroups = [
 
 export default function GroupList() {
   const [groups, setGroups] = useState(mockGroups);
+
+  // magic function
+  // need to algorithmically fetch group data from firebase
+  // Also need to fetch with filters
+  fetchGroupData('TestGroupPleaseWork').then(importedGroup => {
+    if (importedGroup) {
+      setGroups(prevGroups => {
+        // Check if the group already exists
+        const groupExists = prevGroups.some(group => group.id === importedGroup.id);
+        if (!groupExists) {
+          return [...prevGroups, importedGroup];
+        }
+        return prevGroups; // Return the existing list if the group is already present
+      });
+    }
+  });
+
   
   return (
     <div className="pb-6 space-y-6">

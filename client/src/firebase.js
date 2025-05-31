@@ -82,6 +82,23 @@ function addStudyGroupData(groupId, data) {
     });
 }
 
+// Function to fetch group data, group list component needs to algorithmically call this
+function fetchGroupData(groupId) {
+  const groupRef = ref(db, 'studyGroups/' + groupId);
+  return get(groupRef)
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        return snapshot.val();
+      } else {
+        console.log("No data available for this group");
+        return null;
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching group data:", error);
+    });
+}
+
 let analytics = null;
 if (typeof window !== "undefined") {
   import("firebase/analytics").then(({ getAnalytics }) => {
@@ -90,5 +107,5 @@ if (typeof window !== "undefined") {
 }
 
 //const reference = ref(db, 'users/'=userId);
-export { app, analytics, auth, db,pingBackend,addData,getUserName,addStudyGroupData};
+export { app, analytics, auth, db,pingBackend,addData,getUserName,addStudyGroupData,fetchGroupData};
 

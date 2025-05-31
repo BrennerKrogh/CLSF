@@ -2,6 +2,7 @@
 import BottomNavigation from '../components/BottomNavigation';
 import GroupSearch from './components/GroupSearch';
 import GroupList from './components/GroupList';
+import UserNameComponent from '../components/userNameComponent';
 
 export default function FindGroups() {
   return (
@@ -10,6 +11,8 @@ export default function FindGroups() {
       <p className="text-lg mb-6">Join a study group to collaborate with classmates and improve your academic performance.</p>
       
       {/* Search and filter component */}
+      <UserNameComponent />
+
       <GroupSearch />
       
       {/* Group listings */}

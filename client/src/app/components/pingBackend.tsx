@@ -29,6 +29,7 @@ const PingBackendButton: React.FC = () => {
                 cursor: loading ? 'not-allowed' : 'pointer',
                 fontSize: '16px',
                 transition: 'background-color 0.3s ease',
+                width: 'fit-content',
             }}
         >
             {loading ? 'Pinging...' : 'Ping Backend'}

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { auth } from '../../firebase'; // Adjust the path to firebase.js as needed
 
-const styles = {
+const styles: { [key: string]: React.CSSProperties } = {
     userNameBox: {
         padding: '2px',
         border: '1px solid #ccc',
@@ -11,10 +11,15 @@ const styles = {
         textAlign: 'center',
         backgroundColor: 'blue',
         width: 'fit-content',
+        position: 'absolute',
+        top: '10px',
+        right: '10px',
     },
     userNameText: {
-        fontSize: '8px',
-        color: '#333',
+        fontSize: '14px',
+        color: 'white',
+        fontWeight: 'bold',
+        WebkitTextStroke: '.5px black',
     },
 };
 
