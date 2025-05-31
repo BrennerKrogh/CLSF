@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from 'react';
+import {addStudyGroupData} from '../../../firebase'
 
 export default function CreateGroupForm() {
   const [formData, setFormData] = useState({
@@ -50,7 +51,8 @@ export default function CreateGroupForm() {
     // Simulate API call with timeout
     setTimeout(() => {
       console.log('Submitting form data:', formData);
-      alert('Study group created successfully! (This would connect to a backend in a real app)');
+      addStudyGroupData(formData.name, formData);
+      //alert('Study group created successfully! (This would connect to a backend in a real app)');
       setIsSubmitting(false);
       
       // Reset form after submission

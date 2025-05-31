@@ -5,12 +5,12 @@ import { auth } from '../../firebase'; // Adjust the path to firebase.js as need
 
 const styles = {
     userNameBox: {
-        padding: '10px',
+        padding: '2px',
         border: '1px solid #ccc',
         borderRadius: '5px',
         textAlign: 'center',
         backgroundColor: 'blue',
-        width: '10%',
+        width: 'fit-content',
     },
     userNameText: {
         fontSize: '8px',

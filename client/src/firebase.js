@@ -27,28 +27,11 @@ const auth = getAuth(app);
 const db = getDatabase(app);
 
 console.log("Firebase initialized successfully");
-function setUserData(userId, data) {
-  const userRef = ref(db, 'users/' + userId);
-  return set(userRef, data);
-}
 
-setUserData("testUser", {
-  name: "Random User",
-  age: Math.floor(Math.random() * 100),
-  email: "randomuser@example.com"
-});
-
-onAuthStateChanged(getAuth(), (user) => {
-  if (user) {
-    console.log("User is signed in:", user);
-  } else {
-    console.log("No user is signed in");
-  }
-}
-);
 
 //This is how you can add data to the database from scratch, we will have a more complex function
 //for making the study group but the ideal will be the same
+//This is just a test, REMOVE
 function addData(userId, data) {
   const userRef = ref(db, 'users/' + userId);
   return set(userRef, data)
@@ -59,6 +42,7 @@ function addData(userId, data) {
       console.error("Error adding data:", error);
     });
 }
+
 
 //just a function for making sure the backend works
 function pingBackend() {
@@ -72,6 +56,9 @@ function pingBackend() {
       console.error("Ping failed:", error);
     });
 }
+
+
+//Function currently being used for the user email component
 function getUserName() {
   const user = getAuth().currentUser;
   if (user) {
@@ -79,6 +66,20 @@ function getUserName() {
   } else {
     return "No user signed in";
   }
+}
+
+
+// Funciton for adding study group data to database
+// Not sure how to deal with unique idenifyers yet
+function addStudyGroupData(groupId, data) {
+  const groupRef = ref(db, 'studyGroups/' + groupId);
+  return set(groupRef, data)
+    .then(() => {
+      console.log("Study group data added successfully");
+    })
+    .catch((error) => {
+      console.error("Error adding study group data:", error);
+    });
 }
 
 let analytics = null;
@@ -89,5 +90,5 @@ if (typeof window !== "undefined") {
 }
 
 //const reference = ref(db, 'users/'=userId);
-export { app, analytics, auth, db,pingBackend,addData,getUserName};
+export { app, analytics, auth, db,pingBackend,addData,getUserName,addStudyGroupData};
 
