@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import BottomNavigation from './components/BottomNavigation';
 
-export default function Home() {
+export default function Page() {
   return (
     <div className="flex flex-col justify-between min-h-screen">
       {/* Main content */}
