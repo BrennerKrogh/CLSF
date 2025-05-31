@@ -1,10 +1,15 @@
 // src/app/page.tsx
 import Image from 'next/image';
 import BottomNavigation from '../components/BottomNavigation';
+import PingBackendButton from '../components/pingBackend';
+import AddDataButton from '../components/addDataButton';
 
 export default function Page() {
   return (
     <div className="flex flex-col justify-between min-h-screen">
+      <PingBackendButton />
+      <AddDataButton />
+
       {/* Main content */}
       <main className="flex flex-col md:flex-row justify-center items-center w-full max-w-6xl mx-auto px-4 py-12 flex-grow">
         {/* Text section */}
@@ -23,8 +28,7 @@ export default function Page() {
       
       {/* Add spacer to prevent content from being hidden behind the navigation bar */}
       <div className="h-16"></div>
-      
-      {/* Bottom navigation */}
+      {/* Ping backend button */}
       <BottomNavigation />
     </div>
   );
