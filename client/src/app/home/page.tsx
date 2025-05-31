@@ -3,12 +3,16 @@ import Image from 'next/image';
 import BottomNavigation from '../components/BottomNavigation';
 import PingBackendButton from '../components/pingBackend';
 import AddDataButton from '../components/addDataButton';
+import UserNameComponent from '../components/userNameComponent';
 
 export default function Page() {
   return (
     <div className="flex flex-col justify-between min-h-screen">
       <PingBackendButton />
       <AddDataButton />
+      <UserNameComponent />
+      
+
 
       {/* Main content */}
       <main className="flex flex-col md:flex-row justify-center items-center w-full max-w-6xl mx-auto px-4 py-12 flex-grow">

@@ -3,6 +3,9 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getDatabase, ref,set} from "firebase/database";
+import { get } from "firebase/database";
+import { onAuthStateChanged } from "firebase/auth";
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyCHRw0E0QyJdCKg3x6110qcCv6CN0aSpm0",
@@ -14,6 +17,8 @@ const firebaseConfig = {
   appId: "1:771126443973:web:65bb6d3e4a5205336a15ac",
   measurementId: "G-S72EE3YEDX"
 };
+
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -33,6 +38,14 @@ setUserData("testUser", {
   email: "randomuser@example.com"
 });
 
+onAuthStateChanged(getAuth(), (user) => {
+  if (user) {
+    console.log("User is signed in:", user);
+  } else {
+    console.log("No user is signed in");
+  }
+}
+);
 
 //This is how you can add data to the database from scratch, we will have a more complex function
 //for making the study group but the ideal will be the same
@@ -59,7 +72,14 @@ function pingBackend() {
       console.error("Ping failed:", error);
     });
 }
-
+function getUserName() {
+  const user = getAuth().currentUser;
+  if (user) {
+    return user.displayName || "No display name set";
+  } else {
+    return "No user signed in";
+  }
+}
 
 let analytics = null;
 if (typeof window !== "undefined") {
@@ -69,5 +89,5 @@ if (typeof window !== "undefined") {
 }
 
 //const reference = ref(db, 'users/'=userId);
-export { app, analytics, auth, db,pingBackend,addData};
+export { app, analytics, auth, db,pingBackend,addData,getUserName};
 
