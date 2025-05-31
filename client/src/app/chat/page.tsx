@@ -12,13 +12,16 @@ import {
 } from 'firebase/firestore';
 
 export default function ChatPage() {
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<{ id: string; text: string }[]>([]);
   const [input, setInput] = useState('');
 
   useEffect(() => {
     const q = query(collection(db, 'messages'), orderBy('createdAt'));
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      setMessages(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      setMessages(snapshot.docs.map(doc => {
+        const data = doc.data();
+        return { id: doc.id, text: data.text || '' };
+      }));
     });
     return () => unsubscribe();
   }, []);

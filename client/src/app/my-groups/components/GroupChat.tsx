@@ -40,7 +40,7 @@ interface GroupChatProps {
 }
 
 // Mock message data - in a real app, this would come from an API
-const getMockMessages = (groupId: string): Message[] => {
+const getMockMessages = (): Message[] => {
   return [
     {
       id: '1',
@@ -92,7 +92,7 @@ export default function GroupChat({ group, onBack }: GroupChatProps) {
     const fetchMessages = async () => {
       // Simulate API delay
       await new Promise(resolve => setTimeout(resolve, 800));
-      setMessages(getMockMessages(group.id));
+      setMessages(getMockMessages());
       setIsLoading(false);
     };
     

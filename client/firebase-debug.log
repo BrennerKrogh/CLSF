@@ -1,0 +1,267 @@
+[debug] [2025-05-31T06:41:01.534Z] ----------------------------------------------------------------------
+[debug] [2025-05-31T06:41:01.538Z] Command:       /home/krogh/.nvm/versions/node/v22.13.1/bin/node /home/krogh/.nvm/versions/node/v22.13.1/bin/firebase deploy
+[debug] [2025-05-31T06:41:01.539Z] CLI Version:   14.5.1
+[debug] [2025-05-31T06:41:01.539Z] Platform:      linux
+[debug] [2025-05-31T06:41:01.539Z] Node Version:  v22.13.1
+[debug] [2025-05-31T06:41:01.539Z] Time:          Fri May 30 2025 23:41:01 GMT-0700 (Pacific Daylight Time)
+[debug] [2025-05-31T06:41:01.540Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-05-31T06:41:01.901Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-05-31T06:41:01.902Z] > authorizing via signed-in user (bkrogh@ucsc.edu)
+[debug] [2025-05-31T06:41:01.903Z] [iam] checking project clsf-100903 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2025-05-31T06:41:01.904Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:41:01.904Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:41:01.906Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/clsf-100903:testIamPermissions [none]
+[debug] [2025-05-31T06:41:01.906Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/clsf-100903:testIamPermissions x-goog-quota-user=projects/clsf-100903
+[debug] [2025-05-31T06:41:01.906Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/clsf-100903:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-05-31T06:41:02.148Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/clsf-100903:testIamPermissions 200
+[debug] [2025-05-31T06:41:02.148Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/clsf-100903:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-05-31T06:41:02.149Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:41:02.149Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:41:02.150Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/clsf-100903 [none]
+[debug] [2025-05-31T06:41:02.796Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/clsf-100903 200
+[debug] [2025-05-31T06:41:02.797Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/clsf-100903 {"projectId":"clsf-100903","projectNumber":"771126443973","displayName":"CLSF","name":"projects/clsf-100903","resources":{"hostingSite":"clsf-100903","realtimeDatabaseInstance":"clsf-100903-default-rtdb"},"state":"ACTIVE","etag":"1_24c53713-02b8-493f-b45a-fdba8e0b442e"}
+[debug] [2025-05-31T06:41:04.126Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:41:04.126Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:41:04.126Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/clsf-100903/sites pageToken=&pageSize=10
+[debug] [2025-05-31T06:41:04.739Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/clsf-100903/sites 200
+[debug] [2025-05-31T06:41:04.740Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/clsf-100903/sites {"sites":[{"name":"projects/clsf-100903/sites/clsf-100903","defaultUrl":"https://clsf-100903.web.app","type":"DEFAULT_SITE"},{"name":"projects/clsf-100903/sites/clsf-nextjssite","defaultUrl":"https://clsf-nextjssite.web.app","type":"USER_SITE"}]}
+[debug] [2025-05-31T06:41:04.741Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:41:04.741Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:41:04.741Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/clsf-100903/sites 
+[debug] [2025-05-31T06:41:04.923Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/clsf-100903/sites 200
+[debug] [2025-05-31T06:41:04.924Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/clsf-100903/sites {"sites":[{"name":"projects/clsf-100903/sites/clsf-100903","defaultUrl":"https://clsf-100903.web.app","type":"DEFAULT_SITE"},{"name":"projects/clsf-100903/sites/clsf-nextjssite","defaultUrl":"https://clsf-nextjssite.web.app","type":"USER_SITE"}]}
+[debug] [2025-05-31T06:41:04.924Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:41:04.924Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:41:04.925Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/clsf-100903/webApps/-/config [none]
+[debug] [2025-05-31T06:41:05.354Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/clsf-100903/webApps/-/config 200
+[debug] [2025-05-31T06:41:05.355Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/clsf-100903/webApps/-/config {"projectId":"clsf-100903","appId":"1:771126443973:web:65bb6d3e4a5205336a15ac","databaseURL":"https://clsf-100903-default-rtdb.firebaseio.com","storageBucket":"clsf-100903.firebasestorage.app","apiKey":"AIzaSyCHRw0E0QyJdCKg3x6110qcCv6CN0aSpm0","authDomain":"clsf-100903.firebaseapp.com","messagingSenderId":"771126443973","measurementId":"G-S72EE3YEDX"}
+[info] 
+   Thank you for trying our early preview of Next.js support on Firebase Hosting.
+   During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
+   The integration is known to work with Next.js version 12 - 15.0. You may encounter errors.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/nextjs
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2025-05-31T06:41:08.591Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:41:08.591Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:41:08.591Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/clsf-100903/sites/clsf-100903 [none]
+[debug] [2025-05-31T06:41:08.835Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/clsf-100903/sites/clsf-100903 200
+[debug] [2025-05-31T06:41:08.835Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/clsf-100903/sites/clsf-100903 {"name":"projects/clsf-100903/sites/clsf-100903","defaultUrl":"https://clsf-100903.web.app","type":"DEFAULT_SITE"}
+[info]    ▲ Next.js 15.3.1
+
+[info] 
+
+[info]    Creating an optimized production build ...
+
+[info]  ✓ Compiled successfully in 14.0s
+
+[info]    Linting and checking validity of types ...
+
+[info] 
+Failed to compile.
+
+[info] 
+./src/app/account/components/AccountProfile.tsx
+5:8  Error: 'Image' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/chat/page.tsx
+15:44  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/app/home/page.tsx
+2:8  Error: 'Image' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/login/page.tsx
+22:19  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+33:19  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/app/my-groups/components/GroupChat.tsx
+43:26  Error: 'groupId' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/my-groups/components/MyGroupsList.tsx
+135:57  Error: `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`.  react/no-unescaped-entities
+
+./src/app/page.tsx
+2:8  Error: 'Image' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/firebase.js
+4:10  Error: 'getFirestore' is defined but never used.  @typescript-eslint/no-unused-vars
+7:10  Error: 'onAuthStateChanged' is defined but never used.  @typescript-eslint/no-unused-vars
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+
+[debug] [2025-05-31T06:41:33.246Z] Error: ENOENT: no such file or directory, open '/home/krogh/Documents/CSE115A/CLSF/client/.next/export-marker.json'
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2025-05-31T06:47:51.571Z] ----------------------------------------------------------------------
+[debug] [2025-05-31T06:47:51.575Z] Command:       /home/krogh/.nvm/versions/node/v22.13.1/bin/node /home/krogh/.nvm/versions/node/v22.13.1/bin/firebase deploy
+[debug] [2025-05-31T06:47:51.575Z] CLI Version:   14.5.1
+[debug] [2025-05-31T06:47:51.575Z] Platform:      linux
+[debug] [2025-05-31T06:47:51.576Z] Node Version:  v22.13.1
+[debug] [2025-05-31T06:47:51.576Z] Time:          Fri May 30 2025 23:47:51 GMT-0700 (Pacific Daylight Time)
+[debug] [2025-05-31T06:47:51.576Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-05-31T06:47:52.075Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-05-31T06:47:52.076Z] > authorizing via signed-in user (bkrogh@ucsc.edu)
+[debug] [2025-05-31T06:47:52.077Z] [iam] checking project clsf-100903 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2025-05-31T06:47:52.079Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:47:52.079Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:47:52.081Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/clsf-100903:testIamPermissions [none]
+[debug] [2025-05-31T06:47:52.081Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/clsf-100903:testIamPermissions x-goog-quota-user=projects/clsf-100903
+[debug] [2025-05-31T06:47:52.081Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/clsf-100903:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-05-31T06:47:52.397Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/clsf-100903:testIamPermissions 200
+[debug] [2025-05-31T06:47:52.397Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/clsf-100903:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-05-31T06:47:52.398Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:47:52.398Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:47:52.399Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/clsf-100903 [none]
+[debug] [2025-05-31T06:47:52.814Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/clsf-100903 200
+[debug] [2025-05-31T06:47:52.814Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/clsf-100903 {"projectId":"clsf-100903","projectNumber":"771126443973","displayName":"CLSF","name":"projects/clsf-100903","resources":{"hostingSite":"clsf-100903","realtimeDatabaseInstance":"clsf-100903-default-rtdb"},"state":"ACTIVE","etag":"1_24c53713-02b8-493f-b45a-fdba8e0b442e"}
+[debug] [2025-05-31T06:47:54.022Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:47:54.022Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:47:54.023Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/clsf-100903/sites pageToken=&pageSize=10
+[debug] [2025-05-31T06:47:54.659Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/clsf-100903/sites 200
+[debug] [2025-05-31T06:47:54.659Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/clsf-100903/sites {"sites":[{"name":"projects/clsf-100903/sites/clsf-100903","defaultUrl":"https://clsf-100903.web.app","type":"DEFAULT_SITE"},{"name":"projects/clsf-100903/sites/clsf-nextjssite","defaultUrl":"https://clsf-nextjssite.web.app","type":"USER_SITE"}]}
+[debug] [2025-05-31T06:47:54.661Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:47:54.661Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:47:54.661Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/clsf-100903/sites 
+[debug] [2025-05-31T06:47:54.870Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/clsf-100903/sites 200
+[debug] [2025-05-31T06:47:54.870Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/clsf-100903/sites {"sites":[{"name":"projects/clsf-100903/sites/clsf-100903","defaultUrl":"https://clsf-100903.web.app","type":"DEFAULT_SITE"},{"name":"projects/clsf-100903/sites/clsf-nextjssite","defaultUrl":"https://clsf-nextjssite.web.app","type":"USER_SITE"}]}
+[debug] [2025-05-31T06:47:54.871Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:47:54.871Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:47:54.871Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/clsf-100903/webApps/-/config [none]
+[debug] [2025-05-31T06:47:55.110Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/clsf-100903/webApps/-/config 200
+[debug] [2025-05-31T06:47:55.110Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/clsf-100903/webApps/-/config {"projectId":"clsf-100903","appId":"1:771126443973:web:65bb6d3e4a5205336a15ac","databaseURL":"https://clsf-100903-default-rtdb.firebaseio.com","storageBucket":"clsf-100903.firebasestorage.app","apiKey":"AIzaSyCHRw0E0QyJdCKg3x6110qcCv6CN0aSpm0","authDomain":"clsf-100903.firebaseapp.com","messagingSenderId":"771126443973","measurementId":"G-S72EE3YEDX"}
+[info] 
+   Thank you for trying our early preview of Next.js support on Firebase Hosting.
+   During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
+   The integration is known to work with Next.js version 12 - 15.0. You may encounter errors.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/nextjs
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2025-05-31T06:47:58.287Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:47:58.288Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:47:58.288Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/clsf-100903/sites/clsf-100903 [none]
+[debug] [2025-05-31T06:47:58.445Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/clsf-100903/sites/clsf-100903 200
+[debug] [2025-05-31T06:47:58.445Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/clsf-100903/sites/clsf-100903 {"name":"projects/clsf-100903/sites/clsf-100903","defaultUrl":"https://clsf-100903.web.app","type":"DEFAULT_SITE"}
+[info]    ▲ Next.js 15.3.1
+
+[info] 
+
+[info]    Creating an optimized production build ...
+
+[info]  ✓ Compiled successfully in 6.0s
+
+[info]    Linting and checking validity of types ...
+
+[info] Failed to compile.
+
+
+[info] ./src/app/chat/page.tsx:19:32
+Type error: No overload matches this call.
+  Overload 1 of 3, '(firestore: Firestore, path: string, ...pathSegments: string[]): CollectionReference<DocumentData, DocumentData>', gave the following error.
+    Argument of type 'Database' is not assignable to parameter of type 'Firestore'.
+      Property 'toJSON' is missing in type 'Database' but required in type 'Firestore'.
+  Overload 2 of 3, '(reference: CollectionReference<unknown, DocumentData>, path: string, ...pathSegments: string[]): CollectionReference<DocumentData, DocumentData>', gave the following error.
+    Argument of type 'Database' is not assignable to parameter of type 'CollectionReference<unknown, DocumentData>'.
+      Type 'Database' is missing the following properties from type 'CollectionReference<unknown, DocumentData>': id, path, parent, withConverter, and 2 more.
+  Overload 3 of 3, '(reference: DocumentReference<unknown, DocumentData>, path: string, ...pathSegments: string[]): CollectionReference<DocumentData, DocumentData>', gave the following error.
+    Argument of type 'Database' is not assignable to parameter of type 'DocumentReference<unknown, DocumentData>'.
+      Type 'Database' is missing the following properties from type 'DocumentReference<unknown, DocumentData>': converter, firestore, id, path, and 2 more.
+
+  17 |
+  18 |   useEffect(() => {
+> 19 |     const q = query(collection(db, 'messages'), orderBy('createdAt'));
+     |                                ^
+  20 |     const unsubscribe = onSnapshot(q, (snapshot) => {
+  21 |       setMessages(snapshot.docs.map(doc => {
+  22 |         const data = doc.data();
+
+[info] Next.js build worker exited with code: 1 and signal: null
+
+[debug] [2025-05-31T06:48:17.005Z] Error: ENOENT: no such file or directory, open '/home/krogh/Documents/CSE115A/CLSF/client/.next/export-marker.json'
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2025-05-31T06:50:46.449Z] ----------------------------------------------------------------------
+[debug] [2025-05-31T06:50:46.452Z] Command:       /home/krogh/.nvm/versions/node/v22.13.1/bin/node /home/krogh/.nvm/versions/node/v22.13.1/bin/firebase deploy
+[debug] [2025-05-31T06:50:46.453Z] CLI Version:   14.5.1
+[debug] [2025-05-31T06:50:46.453Z] Platform:      linux
+[debug] [2025-05-31T06:50:46.453Z] Node Version:  v22.13.1
+[debug] [2025-05-31T06:50:46.453Z] Time:          Fri May 30 2025 23:50:46 GMT-0700 (Pacific Daylight Time)
+[debug] [2025-05-31T06:50:46.453Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-05-31T06:50:46.819Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-05-31T06:50:46.820Z] > authorizing via signed-in user (bkrogh@ucsc.edu)
+[debug] [2025-05-31T06:50:46.821Z] [iam] checking project clsf-100903 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2025-05-31T06:50:46.822Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:50:46.822Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:50:46.823Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/clsf-100903:testIamPermissions [none]
+[debug] [2025-05-31T06:50:46.823Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/clsf-100903:testIamPermissions x-goog-quota-user=projects/clsf-100903
+[debug] [2025-05-31T06:50:46.823Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/clsf-100903:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-05-31T06:50:47.058Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/clsf-100903:testIamPermissions 200
+[debug] [2025-05-31T06:50:47.058Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/clsf-100903:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2025-05-31T06:50:47.059Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:50:47.059Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:50:47.060Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/clsf-100903 [none]
+[debug] [2025-05-31T06:50:47.511Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/clsf-100903 200
+[debug] [2025-05-31T06:50:47.512Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/clsf-100903 {"projectId":"clsf-100903","projectNumber":"771126443973","displayName":"CLSF","name":"projects/clsf-100903","resources":{"hostingSite":"clsf-100903","realtimeDatabaseInstance":"clsf-100903-default-rtdb"},"state":"ACTIVE","etag":"1_24c53713-02b8-493f-b45a-fdba8e0b442e"}
+[debug] [2025-05-31T06:50:48.739Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:50:48.739Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:50:48.739Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/clsf-100903/sites pageToken=&pageSize=10
+[debug] [2025-05-31T06:50:49.355Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/clsf-100903/sites 200
+[debug] [2025-05-31T06:50:49.355Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/clsf-100903/sites {"sites":[{"name":"projects/clsf-100903/sites/clsf-100903","defaultUrl":"https://clsf-100903.web.app","type":"DEFAULT_SITE"},{"name":"projects/clsf-100903/sites/clsf-nextjssite","defaultUrl":"https://clsf-nextjssite.web.app","type":"USER_SITE"}]}
+[debug] [2025-05-31T06:50:49.357Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:50:49.357Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:50:49.357Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/clsf-100903/sites 
+[debug] [2025-05-31T06:50:49.558Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/clsf-100903/sites 200
+[debug] [2025-05-31T06:50:49.558Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/clsf-100903/sites {"sites":[{"name":"projects/clsf-100903/sites/clsf-100903","defaultUrl":"https://clsf-100903.web.app","type":"DEFAULT_SITE"},{"name":"projects/clsf-100903/sites/clsf-nextjssite","defaultUrl":"https://clsf-nextjssite.web.app","type":"USER_SITE"}]}
+[debug] [2025-05-31T06:50:49.558Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:50:49.558Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:50:49.559Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/clsf-100903/webApps/-/config [none]
+[debug] [2025-05-31T06:50:50.155Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/clsf-100903/webApps/-/config 200
+[debug] [2025-05-31T06:50:50.155Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/clsf-100903/webApps/-/config {"projectId":"clsf-100903","appId":"1:771126443973:web:65bb6d3e4a5205336a15ac","databaseURL":"https://clsf-100903-default-rtdb.firebaseio.com","storageBucket":"clsf-100903.firebasestorage.app","apiKey":"AIzaSyCHRw0E0QyJdCKg3x6110qcCv6CN0aSpm0","authDomain":"clsf-100903.firebaseapp.com","messagingSenderId":"771126443973","measurementId":"G-S72EE3YEDX"}
+[info] 
+   Thank you for trying our early preview of Next.js support on Firebase Hosting.
+   During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
+   The integration is known to work with Next.js version 12 - 15.0. You may encounter errors.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/nextjs
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2025-05-31T06:50:53.411Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:50:53.411Z] Checked if tokens are valid: true, expires at: 1748676866940
+[debug] [2025-05-31T06:50:53.412Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/clsf-100903/sites/clsf-100903 [none]
+[debug] [2025-05-31T06:50:53.654Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/clsf-100903/sites/clsf-100903 200
+[debug] [2025-05-31T06:50:53.654Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/clsf-100903/sites/clsf-100903 {"name":"projects/clsf-100903/sites/clsf-100903","defaultUrl":"https://clsf-100903.web.app","type":"DEFAULT_SITE"}
+[info]    ▲ Next.js 15.3.1
+
+[info] 
+
+[info]    Creating an optimized production build ...
+
+[info]  ✓ Compiled successfully in 6.0s
+
+[info]    Linting and checking validity of types ...
+
+[info] Failed to compile.
+
+
+[info] src/app/chat/page.tsx
+Type error: File '/home/krogh/Documents/CSE115A/CLSF/client/src/app/chat/page.tsx' is not a module.
+
+
+[info] Next.js build worker exited with code: 1 and signal: null
+
+[debug] [2025-05-31T06:51:11.803Z] Error: ENOENT: no such file or directory, open '/home/krogh/Documents/CSE115A/CLSF/client/.next/export-marker.json'
+[error] 
+[error] Error: An unexpected error has occurred.

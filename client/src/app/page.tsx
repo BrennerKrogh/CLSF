@@ -1,5 +1,5 @@
 // src/app/page.tsx
-import Image from 'next/image';
+//import Image from 'next/image';
 import BottomNavigation from './components/BottomNavigation';
 
 export default function Page() {

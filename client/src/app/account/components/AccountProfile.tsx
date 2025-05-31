@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from 'react';
-import Image from 'next/image';
+//import Image from 'next/image';
 
 export default function AccountProfile() {
   // State for edit mode

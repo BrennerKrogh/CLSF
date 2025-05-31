@@ -19,7 +19,7 @@ export default function LoginPage() {
       await createUserWithEmailAndPassword(auth, email, password);
       alert('Registration successful!');
       window.location.href = '/home';
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(err.message);
     }
   };
@@ -30,7 +30,7 @@ export default function LoginPage() {
       await signInWithEmailAndPassword(auth, email, password);
       alert('Login successful!');
       window.location.href = '/home';
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(err.message);
     }
   };

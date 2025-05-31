@@ -132,7 +132,7 @@ export default function MyGroupsList() {
     <div>
       {groups.length === 0 ? (
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 text-center mb-8">
-          <h3 className="text-xl font-semibold mb-2">You're not in any study groups yet</h3>
+          <h3 className="text-xl font-semibold mb-2">You&apos;re not in any study groups yet</h3>
           <p className="text-gray-600 dark:text-gray-400 mb-4">
             Join existing groups or create a new one to get started.
           </p>
