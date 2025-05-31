@@ -44,8 +44,15 @@ function addData(userId, data) {
 }
 
 
-//just a function for making sure the backend works
+// Just a function for making sure the backend works
+// Also a place to put some extra testing calls 
 function pingBackend() {
+  const user = getAuth().currentUser;
+  if (user) {
+    console.log("Email:", user.email);
+  } else {
+    console.log("No user signed in");
+  }
   console.log("Pinging backend...");
   const testRef = ref(db, 'ping');
   set(testRef, { timestamp: Date.now() })
@@ -72,8 +79,16 @@ function getUserName() {
 // Funciton for adding study group data to database
 // Not sure how to deal with unique idenifyers yet
 function addStudyGroupData(groupId, data) {
+  // Add username to data so group has creator in find groups tab
+
+  const user = getAuth().currentUser;
+  const userEmail = user.email;
+  //const username = user ? user.displayName || "Anonymous" : "No user signed in";
+  
   const groupRef = ref(db, 'studyGroups/' + groupId);
-  return set(groupRef, data)
+  const updatedData = { ...data, creator: userEmail };
+
+  return set(groupRef, updatedData)
     .then(() => {
       console.log("Study group data added successfully");
     })

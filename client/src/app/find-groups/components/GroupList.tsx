@@ -81,7 +81,7 @@ export default function GroupList() {
   // magic function
   // need to algorithmically fetch group data from firebase
   // Also need to fetch with filters
-  fetchGroupData('TestGroupPleaseWork').then(importedGroup => {
+  fetchGroupData('neutral group').then(importedGroup => {
     if (importedGroup) {
       setGroups(prevGroups => {
         // Check if the group already exists
@@ -94,7 +94,7 @@ export default function GroupList() {
     }
   });
 
-  
+
   return (
     <div className="pb-6 space-y-6">
       <div className="flex justify-between items-center">
