@@ -1,9 +1,10 @@
 // src/app/find-groups/components/GroupList.tsx
 "use client";
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import GroupCard from './GroupCard';
 import {fetchGroupData} from '../../../firebase';
+import { fetchAllGroups } from '../../../firebase';
 
 // This is mock data that would typically come from a backend API
 const mockGroups = [
@@ -76,8 +77,16 @@ const mockGroups = [
 ];
 
 export default function GroupList() {
-  const [groups, setGroups] = useState(mockGroups);
+  const [groups, setGroups] = useState([]);
 
+  useEffect(() => {
+    fetchAllGroups().then(fetchedGroups => {
+      setGroups(fetchedGroups);
+
+    });
+  }, []);
+
+  /*
   // magic function
   // need to algorithmically fetch group data from firebase
   // Also need to fetch with filters
@@ -93,7 +102,7 @@ export default function GroupList() {
       });
     }
   });
-
+*/
 
   return (
     <div className="pb-6 space-y-6">
