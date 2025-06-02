@@ -21,7 +21,6 @@ export default function LoginPage() {
     e.preventDefault();
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      alert('Registration successful!');
       window.location.href = '/home';
     } catch (err: unknown) {
       setError(err.message);
@@ -32,7 +31,6 @@ export default function LoginPage() {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      alert('Login successful!');
       window.location.href = '/home';
     } catch (err: unknown) {
       setError(err.message);
