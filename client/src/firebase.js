@@ -5,6 +5,7 @@ import { getAuth } from "firebase/auth";
 import { getDatabase, ref,set} from "firebase/database";
 import { get } from "firebase/database";
 //import { onAuthStateChanged } from "firebase/auth";
+import { sendPasswordResetEmail } from "firebase/auth";
 
 
 const firebaseConfig = {
@@ -114,6 +115,16 @@ function fetchGroupData(groupId) {
     });
 }
 
+function resetPassword(email) {
+  return sendPasswordResetEmail(auth, email)
+    .then(() => {
+      console.log("Password reset email sent!");
+    })
+    .catch((error) => {
+      console.error("Error sending password reset email:", error);
+    });
+}
+
 let analytics = null;
 if (typeof window !== "undefined") {
   import("firebase/analytics").then(({ getAnalytics }) => {
@@ -122,5 +133,5 @@ if (typeof window !== "undefined") {
 }
 
 //const reference = ref(db, 'users/'=userId);
-export { app, analytics, auth, db,pingBackend,addData,getUserName,addStudyGroupData,fetchGroupData};
+export { app, analytics, auth, db,pingBackend,addData,getUserName,addStudyGroupData,fetchGroupData,resetPassword};
 
