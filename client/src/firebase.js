@@ -6,7 +6,6 @@ import { getDatabase, ref,set} from "firebase/database";
 import { get } from "firebase/database";
 //import { onAuthStateChanged } from "firebase/auth";
 import { sendPasswordResetEmail } from "firebase/auth";
-import { auth } from "./firebase";
 
 
 const firebaseConfig = {
@@ -150,5 +149,5 @@ if (typeof window !== "undefined") {
 }
 
 //const reference = ref(db, 'users/'=userId);
-export { app, analytics, auth, db,pingBackend,addData,getUserName,addStudyGroupData,fetchGroupData,resetPassword,saveUserProfile,loadUserProfile};
+export { app, analytics, auth, db,pingBackend,addData,getUserName,addStudyGroupData,fetchGroupData,resetPassword,saveUserProfile, loadUserProfile};
 
