@@ -6,6 +6,7 @@ import { getDatabase, ref,set} from "firebase/database";
 import { get } from "firebase/database";
 //import { onAuthStateChanged } from "firebase/auth";
 import { sendPasswordResetEmail } from "firebase/auth";
+import { query, orderByChild, equalTo } from "firebase/database";
 
 
 const firebaseConfig = {
@@ -157,6 +158,28 @@ function loadUserProfile(uid) {
   });
 }
 
+function fetchGroupsByUID() {
+  const userID = getAuth().currentUser?.uid;
+  const groupsRef = ref(db, 'studyGroups');
+  const groupsWUser = query(groupsRef, orderByChild('creator'), equalTo("Brenner"));
+
+  return get(groupsWUser)
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        const groups = snapshot.val();
+        console.log("Groups fetched successfully:", groups);
+        return groups;
+      } else {
+        console.log("No groups found for this user");
+        return null;
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching groups by user ID:", error);
+    });
+
+}
+
 let analytics = null;
 if (typeof window !== "undefined") {
   import("firebase/analytics").then(({ getAnalytics }) => {
@@ -165,5 +188,19 @@ if (typeof window !== "undefined") {
 }
 
 //const reference = ref(db, 'users/'=userId);
-export { app, analytics, auth, db,pingBackend,addData,getUserName,addStudyGroupData,fetchGroupData,fetchAllGroups,resetPassword,saveUserProfile, loadUserProfile};
+export { 
+  app,
+  analytics,
+  auth,
+  db,
+  pingBackend,
+  addData,
+  getUserName,
+  addStudyGroupData,
+  fetchGroupData,
+  fetchAllGroups,
+  resetPassword,
+  saveUserProfile,
+  loadUserProfile,
+  fetchGroupsByUID};
 
