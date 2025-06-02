@@ -3,22 +3,64 @@
 
 import { useState } from 'react';
 //import Image from 'next/image';
+import { useEffect } from 'react';
+import { auth, loadUserProfile, saveUserProfile } from '../../../firebase';
 
 export default function AccountProfile() {
   // State for edit mode
   const [isEditing, setIsEditing] = useState(false);
   
   // State for user profile data
-  const [profileData, setProfileData] = useState({
-    profilePicture: '/placeholder-avatar.png', // This would be the path to your default avatar
+  type Profile = {
+    profilePicture: string;
+    username: string;
+    name: string;
+    major: string;
+    schoolYear: string;
+    school: string;
+    location: string;
+    bio: string;
+  };
+  
+  // Step 2: Default profile
+  const defaultProfileData: Profile = {
+    profilePicture: '/placeholder-avatar.png',
     username: 'username',
     name: 'John Pork',
     major: 'Animal Studies',
     schoolYear: 'Junior',
     school: 'University of Listenbourg',
     location: 'Listenbourg City, LG',
-    bio: 'Animal Studies major looking for help with Bird Studies 101 and Cat Economics 150'
-  });
+    bio: 'Animal Studies major looking for help with Bird Studies 101 and Cat Economics 150',
+  };
+  
+  // Step 3: Use typed state
+  const [profileData, setProfileData] = useState<Profile>(defaultProfileData);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const data = await loadUserProfile(user.uid);
+        setProfileData(
+          data || {
+            profilePicture: '/placeholder-avatar.png',
+            username: 'username',
+            name: 'name',
+            major: 'major',
+            schoolYear: '2025',
+            school: 'UCSC',
+            location: 'Santa Cruz',
+            bio: 'Nice to meet you'
+          }
+        );
+      }
+      setLoading(false);
+    };
+  
+    fetchProfile();
+  }, []);
   
   // Handle input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -30,11 +72,12 @@ export default function AccountProfile() {
   };
   
   // Handle save changes
-  const handleSaveChanges = () => {
-    // Here you would typically save the data to your backend
-    console.log('Saving profile data:', profileData);
-    
-    // Exit edit mode
+  const handleSaveChanges = async () => {
+    const user = auth.currentUser;
+    if (user) {
+      await saveUserProfile(user.uid, profileData);
+      console.log("Profile saved");
+    }
     setIsEditing(false);
   };
   

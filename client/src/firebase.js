@@ -6,6 +6,7 @@ import { getDatabase, ref,set} from "firebase/database";
 import { get } from "firebase/database";
 //import { onAuthStateChanged } from "firebase/auth";
 import { sendPasswordResetEmail } from "firebase/auth";
+import { auth } from "./firebase";
 
 
 const firebaseConfig = {
@@ -125,6 +126,22 @@ function resetPassword(email) {
     });
 }
 
+function saveUserProfile(uid, profileData) {
+  const profileRef = ref(db, `users/${uid}/profile`);
+  return set(profileRef, profileData);
+}
+
+function loadUserProfile(uid) {
+  const profileRef = ref(db, `users/${uid}/profile`);
+  return get(profileRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      return snapshot.val();
+    } else {
+      return null;
+    }
+  });
+}
+
 let analytics = null;
 if (typeof window !== "undefined") {
   import("firebase/analytics").then(({ getAnalytics }) => {
@@ -133,5 +150,5 @@ if (typeof window !== "undefined") {
 }
 
 //const reference = ref(db, 'users/'=userId);
-export { app, analytics, auth, db,pingBackend,addData,getUserName,addStudyGroupData,fetchGroupData,resetPassword};
+export { app, analytics, auth, db,pingBackend,addData,getUserName,addStudyGroupData,fetchGroupData,resetPassword,saveUserProfile,loadUserProfile};
 

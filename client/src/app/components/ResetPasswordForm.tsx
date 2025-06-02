@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { resetPassword } from '../firebase';
+import { resetPassword } from '../../firebase';
 
 const ResetPasswordForm = () => {
   const [email, setEmail] = useState('');

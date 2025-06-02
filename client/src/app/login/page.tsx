@@ -7,11 +7,15 @@ import {
   signInWithEmailAndPassword,
 } from 'firebase/auth';
 
+import ResetPasswordForm from '../components/ResetPasswordForm';
+
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [mode, setMode] = useState<'login' | 'signup'>('login');
+
+  const [showReset, setShowReset] = useState(false);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,6 +36,7 @@ export default function LoginPage() {
       window.location.href = '/home';
     } catch (err: unknown) {
       setError(err.message);
+      setShowReset(true);
     }
   };
 
@@ -84,6 +89,14 @@ export default function LoginPage() {
         <p style={{ color: 'red', marginTop: 10 }}>
           Error: {error}
         </p>
+      )}
+
+      {/* Show Reset Password UI only if login failed */}
+      {showReset && mode === 'login' && (
+        <div style={{ marginTop: 20 }}>
+          <p style={{ fontSize: 14, marginBottom: 6 }}>Forgot your password?</p>
+          <ResetPasswordForm />
+        </div>
       )}
     </div>
   );
