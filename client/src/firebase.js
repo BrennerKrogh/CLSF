@@ -198,7 +198,10 @@ export {
   getUserName,
   addStudyGroupData,
   fetchGroupData,
+<<<<<<< HEAD
   fetchAllGroups,
+=======
+>>>>>>> dcc485c11d02dbe8fc102404cee3b3e21c468895
   resetPassword,
   saveUserProfile,
   loadUserProfile,
