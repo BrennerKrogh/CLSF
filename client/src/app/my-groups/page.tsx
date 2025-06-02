@@ -2,10 +2,17 @@
 import BottomNavigation from '../components/BottomNavigation';
 import MyGroupsList from './components/MyGroupsList';
 import UserNameComponent from '../components/userNameComponent';
+import {fetchGroupsByUID} from '../../firebase'
 
 
 
-export default function MyGroups() {
+
+export default async function MyGroups() {
+
+  const groups: Array<any> = (await fetchGroupsByUID()) || [];
+
+  console.log("Groups recieved",groups);
+  // console.log(`Number of groups found: ${groups.length}`);
   return (
     <div className="flex flex-col min-h-screen p-4 md:p-6 max-w-6xl mx-auto">
       <UserNameComponent />
