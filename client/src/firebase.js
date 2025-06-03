@@ -138,6 +138,22 @@ function fetchGroupData(groupId) {
     });
 }
 
+function fetchAllGroups() {
+  const groupsRef = ref(db, 'studyGroups/');
+  return get(groupsRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      const data = snapshot.val()
+      return Object.entries(data).map(([id, group]) => ({id, ...group}));
+    } else {
+      console.log('No groups found');
+      return [];
+    }
+  }).catch((error) => {
+    console.error('Error fetching groups:', error);
+    return [];
+  })
+}
+
 function resetPassword(email) {
   return sendPasswordResetEmail(auth, email)
     .then(() => {
@@ -204,6 +220,10 @@ export {
   getUserName,
   addStudyGroupData,
   fetchGroupData,
+<<<<<<< HEAD
+  fetchAllGroups,
+=======
+>>>>>>> dcc485c11d02dbe8fc102404cee3b3e21c468895
   resetPassword,
   saveUserProfile,
   loadUserProfile,
