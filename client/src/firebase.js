@@ -209,19 +209,38 @@ function loadUserProfile(uid) {
 //     });
 
 // }
-function fetchGroupsByUID(uid) {
-  console.log("UID at this point:", uid);
+function fetchGroupsByUID() {
+  const user = getAuth().currentUser;
+  if (!user) {
+    console.log('No user signed in for fetchGroupsByUID');
+    return Promise.resolve([]);
+  }
+  
+  const userId = user.uid;
+  console.log("Fetching groups for user:", userId);
+  
   const studyGroupsRef = ref(db, 'studyGroups');
   return get(studyGroupsRef)
     .then((snapshot) => {
       if (snapshot.exists()) {
         const groups = snapshot.val();
-        return Object.keys(groups)
+        console.log('All groups from Firebase:', groups);
+        
+        const userGroups = Object.keys(groups)
           .map((key) => ({
-        id: key,
-        ...groups[key],
+            id: key,
+            ...groups[key],
           }))
-          .filter((group) => group.members && Object.values(group.members).some(member => member === uid));
+          .filter((group) => {
+            // Ensure members is an array and check if user is in it
+            const members = Array.isArray(group.members) ? group.members : [];
+            const isUserInGroup = members.includes(userId);
+            console.log(`Group ${group.id}: members =`, members, `user ${userId} in group:`, isUserInGroup);
+            return isUserInGroup;
+          });
+          
+        console.log('Filtered user groups:', userGroups);
+        return userGroups;
       } else {
         console.log("No study groups available");
         return [];
@@ -231,7 +250,6 @@ function fetchGroupsByUID(uid) {
       console.error("Error fetching study groups:", error);
       return [];
     });
-
 }
 
 
@@ -362,6 +380,7 @@ function leaveGroup(groupId, userId) {
 
 // Function to get groups that a user has joined
 function getUserGroups(userId) {
+  console.log('Fetching groups for user:', userId);
   const groupsRef = ref(db, 'studyGroups');
   
   return get(groupsRef)
@@ -371,14 +390,17 @@ function getUserGroups(userId) {
         const userGroups = [];
         
         Object.entries(allGroups).forEach(([groupId, groupData]) => {
-          const members = groupData.members || [];
+          // Ensure members is always an array
+          const members = Array.isArray(groupData.members) ? groupData.members : [];
           if (members.includes(userId)) {
             userGroups.push({ id: groupId, ...groupData });
           }
         });
         
+        console.log('Found user groups:', userGroups);
         return userGroups;
       } else {
+        console.log('No groups found in database');
         return [];
       }
     })

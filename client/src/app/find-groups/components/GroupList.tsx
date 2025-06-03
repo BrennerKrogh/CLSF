@@ -3,8 +3,7 @@
 
 import { useEffect, useState } from 'react';
 import GroupCard from './GroupCard';
-import {fetchGroupData} from '../../../firebase';
-import { fetchAllGroups } from '../../../firebase';
+import { fetchAllGroups, auth } from '../../../firebase';
 
 // Define the group type to match GroupCard
 interface Group {
@@ -23,42 +22,59 @@ interface Group {
 export default function GroupList() {
   const [groups, setGroups] = useState<Group[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState<string | null>(null);
+
+  // Track current user
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setCurrentUser(user ? user.uid : null);
+    });
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
-    const loadGroups = async () => {
-      try {
-        const fetchedGroups = await fetchAllGroups();
-        setGroups(fetchedGroups || []);
-      } catch (error) {
-        console.error('Error fetching groups:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     loadGroups();
   }, []);
 
+  // Add refresh when user changes (sign in/out)
+  useEffect(() => {
+    if (currentUser !== null) { // Only refresh when we have a definitive user state
+      loadGroups();
+    }
+  }, [currentUser]);
+
+  const loadGroups = async () => {
+    try {
+      setLoading(true);
+      const fetchedGroups = await fetchAllGroups();
+      setGroups(fetchedGroups || []);
+      console.log('Loaded groups:', fetchedGroups);
+    } catch (error) {
+      console.error('Error fetching groups:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Function to handle group updates when a user joins
   const handleGroupUpdate = (updatedGroup: Group) => {
+    console.log('Updating group in list:', updatedGroup);
     setGroups(prevGroups => 
       prevGroups.map(group => 
         group.id === updatedGroup.id ? updatedGroup : group
       )
     );
     
-    // Also refresh the user's status for all groups to ensure consistency
+    // Refresh after a short delay to ensure consistency
     setTimeout(() => {
-      const loadGroups = async () => {
-        try {
-          const fetchedGroups = await fetchAllGroups();
-          setGroups(fetchedGroups || []);
-        } catch (error) {
-          console.error('Error refreshing groups:', error);
-        }
-      };
       loadGroups();
-    }, 1000); // Small delay to ensure Firebase has updated
+    }, 1000);
+  };
+
+  // Add a manual refresh button for debugging
+  const handleRefresh = () => {
+    console.log('Manual refresh triggered');
+    loadGroups();
   };
 
   if (loading) {
@@ -95,9 +111,17 @@ export default function GroupList() {
     <div className="pb-6 space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold">Available Study Groups</h2>
-        <span className="text-gray-600 dark:text-gray-400">
-          {groups.length} group{groups.length !== 1 ? 's' : ''} found
-        </span>
+        <div className="flex items-center space-x-4">
+          <span className="text-gray-600 dark:text-gray-400">
+            {groups.length} group{groups.length !== 1 ? 's' : ''} found
+          </span>
+          <button 
+            onClick={handleRefresh}
+            className="text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300 text-sm"
+          >
+            Refresh
+          </button>
+        </div>
       </div>
       
       {groups.length === 0 ? (
