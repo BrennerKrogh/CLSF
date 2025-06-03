@@ -26,8 +26,13 @@ interface MyGroupCardProps {
 }
 
 export default function MyGroupCard({ group, onOpenChat, onLeaveGroup }: MyGroupCardProps) {
-  // console.log("Rendering MyGroupCard for group:", group.name);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  
+  const handleConfirmLeave = () => {
+    onLeaveGroup(group.id);
+    setShowConfirm(false);
+  };
   
   // Format the next meeting date
   const formatNextMeeting = (dateString: string) => {
@@ -141,27 +146,46 @@ export default function MyGroupCard({ group, onOpenChat, onLeaveGroup }: MyGroup
         
         {/* Action buttons */}
         <div className="flex space-x-2">
-          <button 
-            onClick={() => onLeaveGroup(group.id)} 
-            className="px-3 py-1.5 border border-red-300 text-red-600 dark:border-red-700 dark:text-red-400 rounded-md hover:bg-red-50 dark:hover:bg-red-900 transition text-sm"
-          >
-            Leave Group
-          </button>
-          
-          <button 
-            onClick={() => onOpenChat(group.id)} 
-            className="px-3 py-1.5 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition text-sm flex items-center"
-          >
-            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-            </svg>
-            Chat
-            {group.unreadMessages > 0 && (
-              <span className="ml-1 inline-flex items-center justify-center w-4 h-4 text-xs font-bold leading-none bg-red-500 text-white rounded-full">
-                {group.unreadMessages}
-              </span>
-            )}
-          </button>
+          {showConfirm ? (
+            <div className="flex space-x-2 w-full">
+              <button 
+                onClick={() => setShowConfirm(false)}
+                className="flex-1 px-3 py-1.5 border border-gray-300 text-gray-600 dark:border-gray-600 dark:text-gray-400 rounded-md hover:bg-gray-50 dark:hover:bg-gray-900 transition text-sm"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleConfirmLeave} 
+                className="flex-1 px-3 py-1.5 border border-red-300 text-red-600 dark:border-red-700 dark:text-red-400 rounded-md hover:bg-red-50 dark:hover:bg-red-900 transition text-sm"
+              >
+                Confirm Leave
+              </button>
+            </div>
+          ) : (
+            <>
+              <button 
+                onClick={() => setShowConfirm(true)} 
+                className="px-3 py-1.5 border border-red-300 text-red-600 dark:border-red-700 dark:text-red-400 rounded-md hover:bg-red-50 dark:hover:bg-red-900 transition text-sm"
+              >
+                Leave Group
+              </button>
+              
+              <button 
+                onClick={() => onOpenChat(group.id)} 
+                className="px-3 py-1.5 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition text-sm flex items-center"
+              >
+                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+                Chat
+                {group.unreadMessages > 0 && (
+                  <span className="ml-1 inline-flex items-center justify-center w-4 h-4 text-xs font-bold leading-none bg-red-500 text-white rounded-full">
+                    {group.unreadMessages}
+                  </span>
+                )}
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>

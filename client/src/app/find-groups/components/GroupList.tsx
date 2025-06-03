@@ -19,8 +19,20 @@ interface Group {
   members?: string[];
 }
 
-export default function GroupList() {
-  const [groups, setGroups] = useState<Group[]>([]);
+interface SearchFilters {
+  subject: string;
+  location: string;
+}
+
+interface GroupListProps {
+  searchFilters?: SearchFilters;
+  shouldRefresh?: boolean;
+  onRefreshComplete?: () => void;
+}
+
+export default function GroupList({ searchFilters, shouldRefresh, onRefreshComplete }: GroupListProps) {
+  const [allGroups, setAllGroups] = useState<Group[]>([]);
+  const [filteredGroups, setFilteredGroups] = useState<Group[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentUser, setCurrentUser] = useState<string | null>(null);
 
@@ -43,11 +55,26 @@ export default function GroupList() {
     }
   }, [currentUser]);
 
+  // Handle external refresh trigger
+  useEffect(() => {
+    if (shouldRefresh) {
+      loadGroups();
+      if (onRefreshComplete) {
+        onRefreshComplete();
+      }
+    }
+  }, [shouldRefresh, onRefreshComplete]);
+
+  // Apply filters when searchFilters change
+  useEffect(() => {
+    applyFilters();
+  }, [searchFilters, allGroups]);
+
   const loadGroups = async () => {
     try {
       setLoading(true);
       const fetchedGroups = await fetchAllGroups();
-      setGroups(fetchedGroups || []);
+      setAllGroups(fetchedGroups || []);
       console.log('Loaded groups:', fetchedGroups);
     } catch (error) {
       console.error('Error fetching groups:', error);
@@ -56,10 +83,31 @@ export default function GroupList() {
     }
   };
 
+  const applyFilters = () => {
+    if (!searchFilters || (!searchFilters.subject && !searchFilters.location)) {
+      // No filters applied, show all groups
+      setFilteredGroups(allGroups);
+      return;
+    }
+
+    const filtered = allGroups.filter(group => {
+      const matchesSubject = !searchFilters.subject || 
+        group.subject.toLowerCase().includes(searchFilters.subject.toLowerCase());
+      
+      const matchesLocation = !searchFilters.location || 
+        group.location.toLowerCase().includes(searchFilters.location.toLowerCase());
+
+      return matchesSubject && matchesLocation;
+    });
+
+    setFilteredGroups(filtered);
+    console.log('Applied filters:', searchFilters, 'Results:', filtered.length);
+  };
+
   // Function to handle group updates when a user joins
   const handleGroupUpdate = (updatedGroup: Group) => {
     console.log('Updating group in list:', updatedGroup);
-    setGroups(prevGroups => 
+    setAllGroups(prevGroups => 
       prevGroups.map(group => 
         group.id === updatedGroup.id ? updatedGroup : group
       )
@@ -76,6 +124,9 @@ export default function GroupList() {
     console.log('Manual refresh triggered');
     loadGroups();
   };
+
+  const groupsToShow = filteredGroups;
+  const isFiltered = searchFilters && (searchFilters.subject || searchFilters.location);
 
   if (loading) {
     return (
@@ -110,10 +161,13 @@ export default function GroupList() {
   return (
     <div className="pb-6 space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold">Available Study Groups</h2>
+        <h2 className="text-xl font-semibold">
+          {isFiltered ? 'Filtered Study Groups' : 'Available Study Groups'}
+        </h2>
         <div className="flex items-center space-x-4">
           <span className="text-gray-600 dark:text-gray-400">
-            {groups.length} group{groups.length !== 1 ? 's' : ''} found
+            {groupsToShow.length} group{groupsToShow.length !== 1 ? 's' : ''} found
+            {isFiltered && ` (${allGroups.length} total)`}
           </span>
           <button 
             onClick={handleRefresh}
@@ -124,17 +178,35 @@ export default function GroupList() {
         </div>
       </div>
       
-      {groups.length === 0 ? (
+      {isFiltered && (
+        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
+          <p className="text-blue-800 dark:text-blue-400 text-sm">
+            <span className="font-medium">Active filters:</span>
+            {searchFilters?.subject && ` Subject: ${searchFilters.subject}`}
+            {searchFilters?.subject && searchFilters?.location && `, `}
+            {searchFilters?.location && ` Location: ${searchFilters.location}`}
+          </p>
+        </div>
+      )}
+      
+      {groupsToShow.length === 0 ? (
         <div className="text-center py-12">
           <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
           </svg>
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No study groups found</h3>
-          <p className="text-gray-600 dark:text-gray-400">Try adjusting your search filters or create a new group.</p>
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+            {isFiltered ? 'No groups match your filters' : 'No study groups found'}
+          </h3>
+          <p className="text-gray-600 dark:text-gray-400">
+            {isFiltered 
+              ? 'Try adjusting your search filters or create a new group.' 
+              : 'Try adjusting your search filters or create a new group.'
+            }
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {groups.map(group => (
+          {groupsToShow.map(group => (
             <GroupCard 
               key={group.id} 
               group={group} 
