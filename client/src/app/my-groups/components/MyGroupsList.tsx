@@ -94,7 +94,7 @@ export default function MyGroupsList() {
     };
 
     fetchGroups();
-  }, [currentUser, convertToUIGroup]);
+  }, [currentUser]);
 
   useEffect(() => {
     console.log("Updated Groups: ", groups);
