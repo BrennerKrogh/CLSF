@@ -187,17 +187,41 @@ function loadUserProfile(uid) {
   });
 }
 
-function fetchGroupsByUID() {
+// function fetchGroupsByUID(uid) {
+//   console.log("UID at this point:", uid);
+//   const studyGroupsRef = ref(db, 'studyGroups');
+//   return get(studyGroupsRef)
+//     .then((snapshot) => {
+//       if (snapshot.exists()) {
+//         const groups = snapshot.val();
+//         return Object.keys(groups).map((key) => ({
+//           id: key,
+//           ...groups[key],
+//         }));
+//       } else {
+//         console.log("No study groups available");
+//         return [];
+//       }
+//     })
+//     .catch((error) => {
+//       console.error("Error fetching study groups:", error);
+//       return [];
+//     });
+
+// }
+function fetchGroupsByUID(uid) {
   console.log("UID at this point:", uid);
   const studyGroupsRef = ref(db, 'studyGroups');
   return get(studyGroupsRef)
     .then((snapshot) => {
       if (snapshot.exists()) {
         const groups = snapshot.val();
-        return Object.keys(groups).map((key) => ({
-          id: key,
-          ...groups[key],
-        }));
+        return Object.keys(groups)
+          .map((key) => ({
+        id: key,
+        ...groups[key],
+          }))
+          .filter((group) => group.members && Object.values(group.members).some(member => member === "test"));
       } else {
         console.log("No study groups available");
         return [];
@@ -209,6 +233,7 @@ function fetchGroupsByUID() {
     });
 
 }
+
 
 let analytics = null;
 if (typeof window !== "undefined") {
@@ -369,6 +394,7 @@ export {
   analytics,
   auth,
   db,
+  uid,
   pingBackend,
   addData,
   getUserName,
