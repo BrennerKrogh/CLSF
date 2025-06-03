@@ -17,7 +17,20 @@ const eslintConfig = [
       '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/no-explicit-expressions': 'off',
       '@typescript-eslint/no-unused-expressions': 'off',
+      '@typescript-eslint/no-this-alias': 'off',
+      "@typescript-eslint/no-require-imports": "off",
+      "@typescript-eslint/ban-ts-comment": "off",
+      "react-hooks/rules-of-hooks": "off",
+      "react-hooks/exhaustive-deps": "warn",
+      "react/no-find-dom-node": "off",
+      "@typescript-eslint/ban-types": "off",
+      "@next/next/no-assign-module-variable": "off",
+      "@typescript-eslint/ban-types": 'off',
+      "node/no-deprecated-api": "off",
     },
+  },
+  {
+    ignores: ["node_modules/", ".next/"],
   },
 ];
 

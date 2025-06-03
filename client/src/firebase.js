@@ -419,6 +419,24 @@ function getUserGroups(userId) {
     });
 }
 
+// Fetch Username, this takes a uid and returns username, this is used in groups cards
+async function getUsername(uid) {
+  //console.log("Getting Username");
+  const userRef = ref(db, `users/${uid}/profile`);
+  try {
+    const snapshot = await get(userRef);
+    if (snapshot.exists()) {
+      // console.log("Username found:", snapshot.val().username);
+      return snapshot.val().username || "No username set";
+    } else {
+      return "No user found";
+    }
+  } catch (error) {
+    console.error("Error fetching username:", error);
+    return "Error fetching username";
+  }
+}
+
 // Updated exports at the bottom of firebase.js to include these new functions:
 export { 
   app,
@@ -439,7 +457,8 @@ export {
   joinGroup,
   checkIfUserInGroup,
   leaveGroup,
-  getUserGroups
+  getUserGroups,
+  getUsername,
 };
 
 export async function deleteAccount() {

@@ -50,8 +50,7 @@ export default function AccountProfile() {
   //const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      const user = auth.currentUser;
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         const data = await loadUserProfile(user.uid);
         setProfileData(
@@ -63,14 +62,13 @@ export default function AccountProfile() {
             schoolYear: '2025',
             school: 'UCSC',
             location: 'Santa Cruz',
-            bio: 'Nice to meet you'
+            bio: 'Nice to meet you',
           }
         );
       }
-      // setLoading(false);
-    };
+    });
   
-    fetchProfile();
+    return () => unsubscribe(); // Cleanup listener
   }, []);
   
   // Handle input changes

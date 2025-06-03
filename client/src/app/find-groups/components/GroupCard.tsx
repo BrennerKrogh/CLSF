@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { auth, joinGroup, checkIfUserInGroup } from '../../../firebase';
+import { auth, joinGroup, checkIfUserInGroup,getUsername } from '../../../firebase';
 
 // Define the group type
 interface Group {
@@ -23,11 +23,14 @@ interface GroupCardProps {
   onGroupUpdate?: (updatedGroup: Group) => void; // Callback to update parent component
 }
 
+
+
 export default function GroupCard({ group, onGroupUpdate }: GroupCardProps) {
   const [isJoining, setIsJoining] = useState(false);
   const [localGroup, setLocalGroup] = useState(group);
   const [isUserInGroup, setIsUserInGroup] = useState(false);
   const [currentUser, setCurrentUser] = useState<string | null>(null);
+  const [memberUsernames, setMemberUsernames] = useState<string[]>([]);
   
   const isFull = localGroup.joined >= localGroup.capacity;
   
@@ -39,6 +42,26 @@ export default function GroupCard({ group, onGroupUpdate }: GroupCardProps) {
       console.error('Error checking user group status:', error);
     }
   };
+
+
+  useEffect(() => {
+    const fetchMemberUsernames = async () => {
+      if (localGroup.members && localGroup.members.length > 0) {
+        try {
+          const usernames = await Promise.all(localGroup.members.map((uid) => getUsername(uid)));
+          setMemberUsernames(usernames);
+        } catch (error) {
+          console.error('Error fetching member usernames:', error);
+          setMemberUsernames([]); // Fallback to an empty list
+        }
+      } else {
+        setMemberUsernames([]); // No members
+      }
+    };
+  
+    fetchMemberUsernames();
+  }, [localGroup.members]);
+  
 
   useEffect(() => {
     // Check if user is authenticated and get their ID
@@ -194,6 +217,12 @@ export default function GroupCard({ group, onGroupUpdate }: GroupCardProps) {
           </svg>
           <p className="text-gray-600 dark:text-gray-400">{localGroup.dateTime}</p>
         </div>
+        {          /* Display joined members if available */}
+        {memberUsernames.length > 0 && (
+            <div className="text-sm text-gray-500 dark:text-gray-400">
+          <span className="font-medium">Members:</span> {memberUsernames.join(', ')}
+        </div>
+      )}
       </div>
       
       {/* Card footer with join button */}
