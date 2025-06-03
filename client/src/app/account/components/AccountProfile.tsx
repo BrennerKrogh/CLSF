@@ -5,6 +5,8 @@ import { useState } from 'react';
 //import Image from 'next/image';
 import { useEffect } from 'react';
 import { auth, loadUserProfile, saveUserProfile } from '../../../firebase';
+import { deleteAccount } from '../../../firebase';
+import { signOut } from "firebase/auth";
 
 export default function AccountProfile() {
   // State for edit mode
@@ -79,6 +81,33 @@ export default function AccountProfile() {
       console.log("Profile saved");
     }
     setIsEditing(false);
+  };
+
+  // Handle account deletion
+  const handleDeleteAccount = async () => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to permanently delete your account?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      await deleteAccount();
+      alert("Account deleted successfully.");
+      window.location.href = "/login";
+    } catch (err: any) {
+      alert("Failed to delete account: " + err.message);
+    }
+  };
+
+  // Handle signing out
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      alert("Signed out successfully.");
+      window.location.href = "/login";
+    } catch (err: any) {
+      alert("Sign out failed: " + err.message);
+    }
   };
   
   return (
@@ -263,6 +292,22 @@ export default function AccountProfile() {
             )}
           </div>
         </div>
+      </div>
+      {/* Sign out button */}
+      <div className="mt-4 flex space-x-4">
+        <button
+          onClick={handleSignOut}
+          className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition"
+        >
+          Sign Out
+        </button>
+
+        <button // delete account button
+          onClick={handleDeleteAccount}
+          className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
+        >
+          Delete Account
+        </button>
       </div>
     </div>
   );
