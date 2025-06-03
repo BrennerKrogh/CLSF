@@ -221,7 +221,7 @@ function fetchGroupsByUID(uid) {
         id: key,
         ...groups[key],
           }))
-          .filter((group) => group.members && Object.values(group.members).some(member => member === "test"));
+          .filter((group) => group.members && Object.values(group.members).some(member => member === uid));
       } else {
         console.log("No study groups available");
         return [];
