@@ -7,6 +7,7 @@ import { get } from "firebase/database";
 //import { onAuthStateChanged } from "firebase/auth";
 import { sendPasswordResetEmail,onAuthStateChanged,setPersistence, browserLocalPersistence } from "firebase/auth";
 import { query, orderByChild, equalTo } from "firebase/database";
+import { deleteUser } from 'firebase/auth';
 
 
 const firebaseConfig = {
@@ -253,3 +254,11 @@ export {
   fetchAllGroups,
   fetchGroupsByUID};
 
+export async function deleteAccount() {
+  const user = auth.currentUser;
+  if (user) {
+    await deleteUser(user);
+  } else {
+    throw new Error("No user is currently logged in.");
+  }
+}
