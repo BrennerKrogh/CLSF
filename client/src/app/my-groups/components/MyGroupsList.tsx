@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import MyGroupCard from './MyGroupCard';
 import GroupChat from './GroupChat';
-import {fetchGroupsByUID} from '../../../firebase'
+import {fetchGroupsByUID,uid} from '../../../firebase'
 import { useEffect } from 'react';
 import { group } from 'console';
 
@@ -95,14 +95,14 @@ export default function MyGroupsList() {
   const [loading, setLoading] = useState<boolean>(true); // Add loading state
   useEffect(() => {
     const fetchGroups = async () => {
-      const fetchedGroups = await fetchGroupsByUID();
+      const fetchedGroups = await fetchGroupsByUID(uid);
       setGroups(Array.isArray(fetchedGroups) ? fetchedGroups : []); // Ensure fetchedGroups is an array
       console.log("Groups fetched:", fetchedGroups);
       setLoading(false); // Set loading to false after fetching
     };
 
     fetchGroups();
-  }, []);
+  }, [uid]); // Add uid as a dependency to refetch groups when it changes
 
   useEffect(() => {
     console.log("Updated Groups: ", groups);

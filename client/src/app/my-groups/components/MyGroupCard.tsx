@@ -32,7 +32,7 @@ interface MyGroupCardProps {
 }
 
 export default function MyGroupCard({ group, onOpenChat, onLeaveGroup }: MyGroupCardProps) {
-  console.log("Rendering MyGroupCard for group:", group.name);
+  // console.log("Rendering MyGroupCard for group:", group.name);
   const [isExpanded, setIsExpanded] = useState(false);
   
   // Format the next meeting date
