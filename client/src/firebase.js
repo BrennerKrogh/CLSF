@@ -5,7 +5,7 @@ import { getAuth } from "firebase/auth";
 import { getDatabase, ref,set} from "firebase/database";
 import { get } from "firebase/database";
 //import { onAuthStateChanged } from "firebase/auth";
-import { sendPasswordResetEmail } from "firebase/auth";
+import { sendPasswordResetEmail,onAuthStateChanged,setPersistence, browserLocalPersistence } from "firebase/auth";
 import { query, orderByChild, equalTo } from "firebase/database";
 
 
@@ -25,8 +25,30 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-//const db = getFirestore(app);
+let uid = null;
+onAuthStateChanged(auth, (user) => {
+  uid = user ? user.uid : null;
+});
 const db = getDatabase(app);
+
+// Set session persistence to local storage
+// This allows the user to stay signed in even after closing the browser
+setPersistence(auth, browserLocalPersistence)
+  .then(() => {
+    console.log("Session persistence set to local.");
+  })
+  .catch((error) => {
+    console.error("Error setting session persistence:", error);
+  });
+
+// Auth state listener 
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("User is signed in:", user.uid);
+  } else {
+    console.log("User is signed out.");
+  }
+});
 
 console.log("Firebase initialized successfully");
 
@@ -36,7 +58,7 @@ console.log("Firebase initialized successfully");
 //This is just a test, REMOVE
 function addData(userId, data) {
   const userRef = ref(db, 'users/' + userId);
-  return set(userRef, data)
+  return set(userRef, data,auth.email)
     .then(() => {
       console.log("Data added successfully");
     })
@@ -143,23 +165,23 @@ function loadUserProfile(uid) {
 }
 
 function fetchGroupsByUID() {
-  const userID = getAuth().currentUser?.uid;
-  const groupsRef = ref(db, 'studyGroups');
-  const groupsWUser = query(groupsRef, orderByChild('creator'), equalTo("Brenner"));
-
-  return get(groupsWUser)
+  const studyGroupsRef = ref(db, 'studyGroups');
+  return get(studyGroupsRef)
     .then((snapshot) => {
       if (snapshot.exists()) {
         const groups = snapshot.val();
-        console.log("Groups fetched successfully:", groups);
-        return groups;
+        return Object.keys(groups).map((key) => ({
+          id: key,
+          ...groups[key],
+        }));
       } else {
-        console.log("No groups found for this user");
-        return null;
+        console.log("No study groups available");
+        return [];
       }
     })
     .catch((error) => {
-      console.error("Error fetching groups by user ID:", error);
+      console.error("Error fetching study groups:", error);
+      return [];
     });
 
 }

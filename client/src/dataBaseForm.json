@@ -1,0 +1,124 @@
+{
+    "GroupNum": 4,
+    "ping": {
+      "timestamp": 1748897104844
+    },
+    "studyGroups": {
+      "Good group": {
+        "capacity": 5,
+        "createdBy": "bkrogh@ucsc.edu",
+        "dateTime": "all time",
+        "description": "happy hapy",
+        "isPublic": true,
+        "location": "sunny room",
+        "name": "Good group",
+        "subject": "happy class"
+      },
+      "Minecraft Class": {
+        "capacity": 5,
+        "creator": "varun@firecrest.org",
+        "dateTime": "moon",
+        "description": "mining",
+        "isPublic": true,
+        "location": "grass biome",
+        "name": "Minecraft Class",
+        "subject": "minecraft"
+      },
+      "TestGroupPleaseWork": {
+        "capacity": 7,
+        "creator": "Brenner",
+        "dateTime": "Erry Night brother",
+        "description": "asfd",
+        "id": 1,
+        "isPublic": true,
+        "location": "Brenner's Crib",
+        "members": {
+          "uid": "dwl9VETruzLUFnMj0LMovFJgjrV2"
+        },
+        "name": "TestGroupPleaseWork",
+        "subject": "subjecta"
+      },
+      "among us group": {
+        "capacity": 5,
+        "creator": "varun@firecrest.org",
+        "dateTime": "ijdgljdifg",
+        "description": "skrbigi",
+        "isPublic": true,
+        "location": "finoaeifn",
+        "name": "among us group",
+        "subject": "test"
+      },
+      "evil group": {
+        "capacity": 3,
+        "createdBy": "Anonymous",
+        "dateTime": "sunday nights",
+        "description": "evil things",
+        "isPublic": true,
+        "location": "dark basement",
+        "name": "evil group",
+        "subject": "dark arts"
+      },
+      "neutral group": {
+        "capacity": 5,
+        "creator": "bkrogh@ucsc.edu",
+        "dateTime": "tuesday",
+        "description": "nothing going on",
+        "isPublic": true,
+        "location": "computer lab",
+        "name": "neutral group",
+        "subject": "boring class"
+      }
+    },
+    "users": {
+      "Brenner": "4",
+      "LqzGrJx83xX8D02GIpBf6eYc1JF2": {
+        "profile": {
+          "bio": "CS major who likes cats",
+          "location": "Santa Cruz",
+          "major": "Computer Science",
+          "name": "Varun Sreedharan",
+          "profilePicture": "/placeholder-avatar.png",
+          "school": "UCSC",
+          "schoolYear": "Junior",
+          "username": "floppagamer"
+        }
+      },
+      "dwl9VETruzLUFnMj0LMovFJgjrV2": {
+        "bio": "yippee",
+        "location": "ocean",
+        "major": "Vanlife",
+        "name": "Brenner",
+        "profile": {
+          "bio": "Nice to meet you",
+          "location": "Santa Cruz",
+          "major": "coder coder",
+          "name": "Krogh",
+          "profilePicture": "/placeholder-avatar.png",
+          "school": "UCSC",
+          "schoolYear": "2025",
+          "username": "Brenner"
+        },
+        "profilePicture": "\"na\"",
+        "school": "reikers",
+        "schoolYear": "freshman",
+        "username": "BK"
+      },
+      "fHhLJJQOj6Y6mgSQP93jD6XfkCA2": {
+        "profile": {
+          "bio": "Nice to meet you!",
+          "location": "Santa Cruz, CA",
+          "major": "Computer Engineering",
+          "name": "Christian Li",
+          "profilePicture": "/placeholder-avatar.png",
+          "school": "UCSC",
+          "schoolYear": "Junior",
+          "username": "christianjli"
+        }
+      },
+      "testUser": {
+        "age": 30,
+        "email": "randomuser@example.com",
+        "name": "Random User"
+      }
+    }
+  }

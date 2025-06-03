@@ -4,6 +4,10 @@
 import { useState } from 'react';
 import MyGroupCard from './MyGroupCard';
 import GroupChat from './GroupChat';
+import {fetchGroupsByUID} from '../../../firebase'
+import { useEffect } from 'react';
+import { group } from 'console';
+
 
 // Define the member type
 interface GroupMember {
@@ -86,12 +90,27 @@ const mockMyGroups: Group[] = [
 ];
 
 export default function MyGroupsList() {
-  const [groups, setGroups] = useState<Group[]>(mockMyGroups);
+  let [groups, setGroups] = useState<Group[]>([]); // Ensure groups is initialized as an array
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
-  
+  const [loading, setLoading] = useState<boolean>(true); // Add loading state
+  useEffect(() => {
+    const fetchGroups = async () => {
+      const fetchedGroups = await fetchGroupsByUID();
+      setGroups(Array.isArray(fetchedGroups) ? fetchedGroups : []); // Ensure fetchedGroups is an array
+      console.log("Groups fetched:", fetchedGroups);
+      setLoading(false); // Set loading to false after fetching
+    };
+
+    fetchGroups();
+  }, []);
+
+  useEffect(() => {
+    console.log("Updated Groups: ", groups);
+    console.log("Number of groups: ", groups.length);
+  }, [groups]);
+
   // Find the selected group
-  const selectedGroup = groups.find(group => group.id === selectedGroupId);
-  
+  const selectedGroup = Array.isArray(groups) ? groups.find(group => group.id === selectedGroupId) : undefined;
   // Handle opening the chat for a specific group
   const handleOpenChat = (groupId: string) => {
     setSelectedGroupId(groupId);
@@ -121,51 +140,51 @@ export default function MyGroupsList() {
   };
   
   // The content to render
+  console.log("Length",groups.length);
   const content = selectedGroup ? (
     // If a group is selected, show the chat interface
     <GroupChat 
       group={selectedGroup} 
       onBack={handleCloseChat} 
     />
+  ) : loading ? (
+    <div className="text-center p-6">
+      <p>Loading your groups...</p>
+    </div>
+  ) : groups.length === 0 ? (
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 text-center mb-8">
+      <h3 className="text-xl font-semibold mb-2">You&apos;re not in any study groups yet</h3>
+      <p className="text-gray-600 dark:text-gray-400 mb-4">
+        Join existing groups or create a new one to get started.
+      </p>
+      <div className="flex justify-center space-x-4">
+        <a 
+          href="/find-groups" 
+          className="px-4 py-2 bg-purple-600 text-white font-medium rounded-md hover:bg-purple-700 transition"
+        >
+          Find Groups
+        </a>
+        <a 
+          href="/create-group" 
+          className="px-4 py-2 bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-white font-medium rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+        >
+          Create Group
+        </a>
+      </div>
+    </div>
   ) : (
-    // Show the list of groups
-    <div>
-      {groups.length === 0 ? (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 text-center mb-8">
-          <h3 className="text-xl font-semibold mb-2">You&apos;re not in any study groups yet</h3>
-          <p className="text-gray-600 dark:text-gray-400 mb-4">
-            Join existing groups or create a new one to get started.
-          </p>
-          <div className="flex justify-center space-x-4">
-            <a 
-              href="/find-groups" 
-              className="px-4 py-2 bg-purple-600 text-white font-medium rounded-md hover:bg-purple-700 transition"
-            >
-              Find Groups
-            </a>
-            <a 
-              href="/create-group" 
-              className="px-4 py-2 bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-white font-medium rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition"
-            >
-              Create Group
-            </a>
-          </div>
-        </div>
-      ) : (
-        <div className="space-y-6">
-          <h2 className="text-xl font-semibold mb-4">Your Groups ({groups.length})</h2>
-          <div className="space-y-4">
-            {groups.map(group => (
-              <MyGroupCard 
-                key={group.id} 
-                group={group} 
-                onOpenChat={handleOpenChat}
-                onLeaveGroup={handleLeaveGroup}
-              />
-            ))}
-          </div>
-        </div>
-      )}
+    <div className="space-y-6">
+      <h2 className="text-xl font-semibold mb-4">Your Groups ({groups.length})</h2>
+      <div className="space-y-4">
+        {groups.map(group => (
+          <MyGroupCard 
+            key={group.id} 
+            group={group} 
+            onOpenChat={handleOpenChat}
+            onLeaveGroup={handleLeaveGroup}
+          />
+        ))}
+      </div>
     </div>
   );
   
