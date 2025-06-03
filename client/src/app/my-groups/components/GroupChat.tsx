@@ -5,7 +5,7 @@ import { ref, push, onValue } from "firebase/database";
 import { db } from "../../../firebase";
 
 import { auth, loadUserProfile } from '../../../firebase';
-import { User } from 'firebase/auth';
+// import { User } from 'firebase/auth';
 
 interface Message {
   id: string;
@@ -45,13 +45,16 @@ export default function GroupChat({ group, onBack }: GroupChatProps) {
 
 
   const [username, setUsername] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<User | null>(null);
+
+  // need to implement chat and user loading
+  // const [loading, setLoading] = useState(true);
+  // const [user, setUser] = useState<User | null>(null);
+  
 
   useEffect(() => {
       const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
           if (currentUser) {
-              setUser(currentUser);
+              // setUser(currentUser);
               try {
                   // Try to load the user profile to get the username
                   const profileData = await loadUserProfile(currentUser.uid);
@@ -70,9 +73,9 @@ export default function GroupChat({ group, onBack }: GroupChatProps) {
               }
           } else {
               setUsername('');
-              setUser(null);
+              // setUser(null);
           }
-          setLoading(false);
+          // setLoading(false);
       });
 
       return () => unsubscribe();

@@ -114,16 +114,30 @@ export default function CreateGroupForm() {
               <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Subject/Course*
               </label>
-              <input
-                type="text"
+              <select
                 id="subject"
                 name="subject"
                 value={formData.subject}
                 onChange={handleInputChange}
-                placeholder="e.g., Computer Science, MATH 101"
                 required
                 className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800"
-              />
+              >
+                <option value="">Select a subject</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Physics">Physics</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Biology">Biology</option>
+                <option value="English">English</option>
+                <option value="History">History</option>
+                <option value="Psychology">Psychology</option>
+                <option value="Engineering">Engineering</option>
+                <option value="Economics">Economics</option>
+                <option value="Art">Art</option>
+                <option value="Music">Music</option>
+                <option value="Philosophy">Philosophy</option>
+                <option value="Sociology">Sociology</option>
+              </select>
             </div>
             
             {/* Capacity */}
@@ -158,16 +172,25 @@ export default function CreateGroupForm() {
               <label htmlFor="location" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Location*
               </label>
-              <input
-                type="text"
+              <select
                 id="location"
                 name="location"
                 value={formData.location}
                 onChange={handleInputChange}
-                placeholder="e.g., McHenry Library, 3rd Floor"
                 required
                 className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800"
-              />
+              >
+                <option value="">Select a location</option>
+                <option value="McHenry Library">McHenry Library</option>
+                <option value="Science & Engineering Library">Science & Engineering Library</option>
+                <option value="Coffee Shops">Coffee Shops</option>
+                <option value="Student Center">Student Center</option>
+                <option value="Online">Online</option>
+                <option value="Residence Halls">Residence Halls</option>
+                <option value="Study Rooms">Study Rooms</option>
+                <option value="Campus">Campus</option>
+                <option value="Off Campus">Off Campus</option>
+              </select>
             </div>
             
             {/* Date/Time */}

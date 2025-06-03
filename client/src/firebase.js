@@ -6,7 +6,7 @@ import { getDatabase, ref,set} from "firebase/database";
 import { get } from "firebase/database";
 //import { onAuthStateChanged } from "firebase/auth";
 import { sendPasswordResetEmail,onAuthStateChanged,setPersistence, browserLocalPersistence } from "firebase/auth";
-import { query, orderByChild, equalTo } from "firebase/database";
+//import { query, orderByChild, equalTo } from "firebase/database";
 import { deleteUser } from 'firebase/auth';
 
 

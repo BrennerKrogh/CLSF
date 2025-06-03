@@ -42,8 +42,21 @@ export default function MyGroupsList() {
     return () => unsubscribe();
   }, []);
 
-  // Convert Firebase group to UI group with mock data
-  const convertToUIGroup = (firebaseGroup: any): Group => {
+  // Firebase interface so we can have strict typing
+  interface FirebaseGroup {
+    id: string;
+    name: string;
+    description: string;
+    creator: string;
+    subject: string;
+    capacity: number;
+    joined: number;
+    location: string;
+    dateTime: string;
+    members?: string[];
+  }
+
+  const convertToUIGroup = (firebaseGroup: FirebaseGroup): Group => {
     // Generate mock next meeting (tomorrow at 2 PM)
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -81,7 +94,7 @@ export default function MyGroupsList() {
     };
 
     fetchGroups();
-  }, [currentUser]);
+  }, [currentUser, convertToUIGroup]);
 
   useEffect(() => {
     console.log("Updated Groups: ", groups);
@@ -104,37 +117,29 @@ export default function MyGroupsList() {
   // Handle leaving a group
   const handleLeaveGroup = async (groupId: string) => {
     if (!currentUser) {
-      alert('You must be signed in to leave a group');
       return;
     }
 
-    const confirmLeave = window.confirm('Are you sure you want to leave this group?');
-    
-    if (confirmLeave) {
-      try {
-        console.log(`Attempting to leave group: ${groupId} with user: ${currentUser}`);
-        
-        // Call the Firebase leaveGroup function
-        await leaveGroup(groupId, currentUser);
-        
-        console.log('Successfully left group, updating local state');
-        
-        // Update the local state by removing the group
-        setGroups(prevGroups => prevGroups.filter(group => group.id !== groupId));
-        
-        // If the group we're leaving is the selected group, close the chat
-        if (selectedGroupId === groupId) {
-          setSelectedGroupId(null);
-        }
-        
-        // Optionally show a success message
-        alert('Successfully left the group');
-        
-      } catch (error) {
-        console.error('Error leaving group:', error);
-        const errorMessage = error instanceof Error ? error.message : 'Failed to leave group. Please try again.';
-        alert(`Failed to leave group: ${errorMessage}`);
+    try {
+      console.log(`Attempting to leave group: ${groupId} with user: ${currentUser}`);
+      
+      // Call the Firebase leaveGroup function
+      await leaveGroup(groupId, currentUser);
+      
+      console.log('Successfully left group, updating local state');
+      
+      // Update the local state by removing the group
+      setGroups(prevGroups => prevGroups.filter(group => group.id !== groupId));
+      
+      // If the group we're leaving is the selected group, close the chat
+      if (selectedGroupId === groupId) {
+        setSelectedGroupId(null);
       }
+      
+    } catch (error) {
+      console.error('Error leaving group:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to leave group. Please try again.';
+      alert(`Failed to leave group: ${errorMessage}`);
     }
   };
   
