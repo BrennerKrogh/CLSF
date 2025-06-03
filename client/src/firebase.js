@@ -68,21 +68,17 @@ onAuthStateChanged(auth, (user) => {
 
 // Just a function for making sure the backend works
 // Also a place to put some extra testing calls 
+// Unit test calls this - BK
 function pingBackend() {
-  const user = getAuth().currentUser;
-  if (user) {
-    console.log("Email:", user.email);
-  } else {
-    console.log("No user signed in");
-  }
-  console.log("Pinging backend...");
   const testRef = ref(db, 'ping');
-  set(testRef, { timestamp: Date.now() })
+  return set(testRef, { timestamp: Date.now() })
     .then(() => {
       console.log("Ping successful");
+      return "Ping successful";
     })
     .catch((error) => {
       console.error("Ping failed:", error);
+      throw error;
     });
 }
 
@@ -445,7 +441,7 @@ async function addUserToGroup(email, groupId) {
     // Find the user ID based on the provided email from the profile section in the database
     const usersRef = ref(db, 'users');
     const usersSnapshot = await get(usersRef);
-    
+
     const usersData = usersSnapshot.val();
     let userId = null;
 
