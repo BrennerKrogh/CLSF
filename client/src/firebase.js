@@ -181,6 +181,7 @@ function loadUserProfile(uid) {
 }
 
 function fetchGroupsByUID() {
+  console.log("UID at this point:", uid);
   const studyGroupsRef = ref(db, 'studyGroups');
   return get(studyGroupsRef)
     .then((snapshot) => {
