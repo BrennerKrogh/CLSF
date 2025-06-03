@@ -42,7 +42,7 @@ setPersistence(auth, browserLocalPersistence)
     console.error("Error setting session persistence:", error);
   });
 
-// Auth state listener 
+// Auth state listener, for debugging purposes
 onAuthStateChanged(auth, (user) => {
   if (user) {
     console.log("User is signed in:", user.uid);
@@ -51,22 +51,20 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-console.log("Firebase initialized successfully");
-
-
-//This is how you can add data to the database from scratch, we will have a more complex function
-//for making the study group but the ideal will be the same
+//Developer tool for testing funcitonality
 //This is just a test, REMOVE
-function addData(userId, data) {
-  const userRef = ref(db, 'users/' + userId);
-  return set(userRef, data,auth.email)
-    .then(() => {
-      console.log("Data added successfully");
-    })
-    .catch((error) => {
-      console.error("Error adding data:", error);
-    });
-}
+// function addData(userId, data) {
+//   const userRef = ref(db, 'users/' + userId);
+//   return set(userRef, data,auth.email)
+//     .then(() => {
+//       console.log("Data added successfully");
+//     })
+//     .catch((error) => {
+//       console.error("Error adding data:", error);
+//     });
+// }
+
+
 
 
 // Just a function for making sure the backend works
@@ -89,6 +87,17 @@ function pingBackend() {
     });
 }
 
+// Test to make ensure firebase connection:
+function addData(userId, data) {
+  const userRef = ref(db, 'users/' + userId);
+  return set(userRef, data)
+    .then(() => {
+      console.log("Data added successfully");
+    })
+    .catch((error) => {
+      console.error("Error adding data:", error);
+    });
+}
 
 //Function currently being used for the user email component
 function getUserName() {

@@ -1,18 +1,16 @@
-// src/app/my-groups/components/GroupChat.tsx
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
+import { ref, push, onValue } from "firebase/database";
+import { db } from "../../../firebase";
 
-// Define the message type
 interface Message {
   id: string;
   sender: string;
   content: string;
   timestamp: string;
-  isCurrentUser: boolean;
 }
 
-// Use the same Group interface as MyGroupsList
 interface Group {
   id: string;
   name: string;
@@ -23,7 +21,7 @@ interface Group {
   joined: number;
   location: string;
   dateTime: string;
-  members?: string[]; // Firebase stores user IDs
+  members?: string[];
   nextMeeting: string;
   unreadMessages: number;
 }
@@ -33,117 +31,77 @@ interface GroupChatProps {
   onBack: () => void;
 }
 
-// Mock message data - in a real app, this would come from an API
-const getMockMessages = (): Message[] => {
-  return [
-    {
-      id: '1',
-      sender: 'csprofessor',
-      content: 'Hi everyone! Looking forward to our next session on Thursday. Please complete the problem set before we meet.',
-      timestamp: '2025-05-19T10:30:00',
-      isCurrentUser: false
-    },
-    {
-      id: '2',
-      sender: 'algomaster',
-      content: 'I had a question about the dynamic programming problem (#3). Anyone want to discuss it?',
-      timestamp: '2025-05-19T11:15:00',
-      isCurrentUser: false
-    },
-    {
-      id: '3',
-      sender: 'currentUser',
-      content: 'Sure! I can help with that one. The key insight is to build the solution recursively.',
-      timestamp: '2025-05-19T11:20:00',
-      isCurrentUser: true
-    },
-    {
-      id: '4',
-      sender: 'codingking',
-      content: 'I\'m bringing my notes from last semester. They cover most of the topics for the midterm.',
-      timestamp: '2025-05-19T13:45:00',
-      isCurrentUser: false
-    },
-    {
-      id: '5',
-      sender: 'csprofessor',
-      content: 'Great! Also, I just found out we can book the study room for an extra hour if we need it.',
-      timestamp: '2025-05-20T09:10:00',
-      isCurrentUser: false
-    }
-  ];
-};
-
 export default function GroupChat({ group, onBack }: GroupChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  
-  // Fetch messages when component mounts
+
+  // Fetch messages from Realtime Database
   useEffect(() => {
-    // In a real app, this would be an API call
-    const fetchMessages = async () => {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 800));
-      setMessages(getMockMessages());
-      setIsLoading(false);
-    };
+    const messagesRef = ref(db, `studyGroups/${group.id}/messages`);
     
-    fetchMessages();
+    const unsubscribe = onValue(messagesRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const messagesObject = snapshot.val();
+        const messagesArray = Object.keys(messagesObject).map((key) => ({
+          id: key,
+          ...messagesObject[key],
+        }));
+        setMessages(messagesArray);
+      } else {
+        setMessages([]);
+      }
+      setIsLoading(false);
+    });
+
+    return () => unsubscribe(); // Cleanup listener on unmount
   }, [group.id]);
-  
+
   // Scroll to bottom when messages change
   useEffect(() => {
     if (!isLoading) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages, isLoading]);
-  
+
   // Format date for messages
   const formatMessageDate = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
-    
-    // Check if the message is from today
     const isToday = date.toDateString() === now.toDateString();
-    
-    // Format time
     const timeOptions: Intl.DateTimeFormatOptions = { hour: 'numeric', minute: '2-digit' };
     const timeStr = date.toLocaleTimeString(undefined, timeOptions);
-    
+
     if (isToday) {
       return timeStr;
     } else {
-      // Format date
       const dateOptions: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' };
       const dateStr = date.toLocaleDateString(undefined, dateOptions);
       return `${dateStr}, ${timeStr}`;
     }
   };
-  
+
   // Handle sending a new message
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (newMessage.trim() === '') return;
-    
-    // Create a new message object
-    const message: Message = {
-      id: Date.now().toString(),
-      sender: 'currentUser',
+
+    const message = {
+      sender: 'currentUser', // Replace with actual user ID or name
       content: newMessage,
       timestamp: new Date().toISOString(),
-      isCurrentUser: true
     };
-    
-    // Add the new message to the list
-    setMessages(prevMessages => [...prevMessages, message]);
-    
-    // Clear the input field
-    setNewMessage('');
+
+    const messagesRef = ref(db, `studyGroups/${group.id}/messages`);
+    try {
+      await push(messagesRef, message);
+      setNewMessage('');
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
   };
-  
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden flex flex-col h-[calc(100vh-16rem)]">
       {/* Chat header */}
@@ -187,22 +145,22 @@ export default function GroupChat({ group, onBack }: GroupChatProps) {
             {messages.map(message => (
               <div 
                 key={message.id} 
-                className={`flex ${message.isCurrentUser ? 'justify-end' : 'justify-start'}`}
+                className={`flex ${message.sender === 'currentUser' ? 'justify-end' : 'justify-start'}`}
               >
                 <div 
                   className={`max-w-[80%] rounded-lg px-4 py-2 ${
-                    message.isCurrentUser 
+                    message.sender === 'currentUser' 
                     ? 'bg-purple-600 text-white' 
                     : 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700'
                   }`}
                 >
-                  {!message.isCurrentUser && (
+                  {message.sender !== 'currentUser' && (
                     <div className="font-semibold text-sm mb-1">{message.sender}</div>
                   )}
                   <p className="text-sm">{message.content}</p>
                   <div 
                     className={`text-xs mt-1 ${
-                      message.isCurrentUser ? 'text-purple-200' : 'text-gray-500 dark:text-gray-400'
+                      message.sender === 'currentUser' ? 'text-purple-200' : 'text-gray-500 dark:text-gray-400'
                     }`}
                   >
                     {formatMessageDate(message.timestamp)}
