@@ -8,8 +8,8 @@ import UserNameComponent from '../components/userNameComponent';
 export default function Page() {
   return (
     <div className="flex flex-col justify-between min-h-screen">
-      <PingBackendButton />
-      <AddDataButton />
+      {/* <PingBackendButton />
+      <AddDataButton /> */}
       <UserNameComponent />
       
 
