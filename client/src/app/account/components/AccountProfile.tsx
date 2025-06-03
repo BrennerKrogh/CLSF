@@ -13,9 +13,9 @@ export default function AccountProfile() {
   // State for edit mode
 
   const searchParams = useSearchParams();
-  const startInEditMode = searchParams.get('edit') == 'true';
-  const [isEditing, setIsEditing] = useState(startInEditMode);
   
+  const [isEditing, setIsEditing] = useState(false);
+
   // State for user profile data
   type Profile = {
     profilePicture: string;
