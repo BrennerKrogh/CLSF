@@ -3,13 +3,7 @@
 
 import { useState } from 'react';
 
-// Define the member type
-interface GroupMember {
-  username: string;
-  role: "creator" | "member";  // Use string literals for specific values
-}
-
-// Define the group type
+// Use the same Group interface as MyGroupsList
 interface Group {
   id: string;
   name: string;
@@ -20,7 +14,7 @@ interface Group {
   joined: number;
   location: string;
   dateTime: string;
-  members: GroupMember[];
+  members?: string[]; // Firebase stores user IDs
   nextMeeting: string;
   unreadMessages: number;
 }

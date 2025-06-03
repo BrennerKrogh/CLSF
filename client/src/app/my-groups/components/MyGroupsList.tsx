@@ -4,18 +4,10 @@
 import { useState } from 'react';
 import MyGroupCard from './MyGroupCard';
 import GroupChat from './GroupChat';
-import {fetchGroupsByUID} from '../../../firebase'
+import { fetchGroupsByUID, leaveGroup, auth } from '../../../firebase';
 import { useEffect } from 'react';
-import { group } from 'console';
 
-
-// Define the member type
-interface GroupMember {
-  username: string;
-  role: "creator" | "member";  // Using string literals for specific values
-}
-
-// Define the group type
+// Simple group type that matches what we actually use
 interface Group {
   id: string;
   name: string;
@@ -26,83 +18,70 @@ interface Group {
   joined: number;
   location: string;
   dateTime: string;
-  members: GroupMember[];
+  members?: string[]; // Firebase stores user IDs
   nextMeeting: string;
   unreadMessages: number;
 }
 
-// This is mock data that would typically come from a backend API
-const mockMyGroups: Group[] = [
-  {
-    id: '1',
-    name: 'Algorithms & Data Structures Study Group',
-    description: 'Preparing for CSE 101 midterm exam focusing on dynamic programming and graph algorithms',
-    creator: 'csprofessor',
-    subject: 'Computer Science',
-    capacity: 6,
-    joined: 4,
-    location: 'McHenry Library, 3rd Floor',
-    dateTime: 'Tuesdays and Thursdays, 4-6 PM',
-    members: [
-      { username: 'csprofessor', role: "creator" },
-      { username: 'algomaster', role: "member" },
-      { username: 'codingking', role: "member" },
-      { username: 'currentUser', role: "member" }
-    ],
-    nextMeeting: '2025-05-21T16:00:00',
-    unreadMessages: 5
-  },
-  {
-    id: '2',
-    name: 'Calculus II Final Exam Prep',
-    description: 'Studying for AM 20 final, focusing on integration techniques and series',
-    creator: 'mathwhiz99',
-    subject: 'Mathematics',
-    capacity: 5,
-    joined: 3,
-    location: 'Science & Engineering Library, Room 215',
-    dateTime: 'Monday, May 25, 2-5 PM',
-    members: [
-      { username: 'mathwhiz99', role: "creator" },
-      { username: 'derivativeking', role: "member" },
-      { username: 'currentUser', role: "member" }
-    ],
-    nextMeeting: '2025-05-25T14:00:00',
-    unreadMessages: 0
-  },
-  {
-    id: '3',
-    name: 'Physics Mechanics Group',
-    description: 'Working through problem sets for PHYS 5A and reviewing lecture material',
-    creator: 'physicsfan22',
-    subject: 'Physics',
-    capacity: 8,
-    joined: 2,
-    location: 'Online (Zoom)',
-    dateTime: 'Saturdays, 10 AM - 12 PM',
-    members: [
-      { username: 'physicsfan22', role: "creator" },
-      { username: 'currentUser', role: "member" }
-    ],
-    nextMeeting: '2025-05-24T10:00:00',
-    unreadMessages: 1
-  }
-];
-
 export default function MyGroupsList() {
-  let [groups, setGroups] = useState<Group[]>([]); // Ensure groups is initialized as an array
+  const [groups, setGroups] = useState<Group[]>([]);
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true); // Add loading state
+  const [loading, setLoading] = useState<boolean>(true);
+  const [currentUser, setCurrentUser] = useState<string | null>(null);
+
+  // Get current user
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setCurrentUser(user.uid);
+      } else {
+        setCurrentUser(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  // Convert Firebase group to UI group with mock data
+  const convertToUIGroup = (firebaseGroup: any): Group => {
+    // Generate mock next meeting (tomorrow at 2 PM)
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(14, 0, 0, 0);
+    
+    return {
+      ...firebaseGroup,
+      nextMeeting: tomorrow.toISOString(),
+      unreadMessages: Math.floor(Math.random() * 5), // Random unread count for demo
+    };
+  };
+
+  // Fetch groups when component mounts or user changes
   useEffect(() => {
     const fetchGroups = async () => {
-      const fetchedGroups = await fetchGroupsByUID();
-      setGroups(Array.isArray(fetchedGroups) ? fetchedGroups : []); // Ensure fetchedGroups is an array
-      console.log("Groups fetched:", fetchedGroups);
-      setLoading(false); // Set loading to false after fetching
+      if (!currentUser) {
+        setGroups([]);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const fetchedGroups = await fetchGroupsByUID();
+        const uiGroups = (Array.isArray(fetchedGroups) ? fetchedGroups : [])
+          .map(convertToUIGroup);
+        setGroups(uiGroups);
+        console.log("Groups fetched:", fetchedGroups);
+      } catch (error) {
+        console.error("Error fetching groups:", error);
+        setGroups([]);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchGroups();
-  }, []);
+  }, [currentUser]);
 
   useEffect(() => {
     console.log("Updated Groups: ", groups);
@@ -111,6 +90,7 @@ export default function MyGroupsList() {
 
   // Find the selected group
   const selectedGroup = Array.isArray(groups) ? groups.find(group => group.id === selectedGroupId) : undefined;
+
   // Handle opening the chat for a specific group
   const handleOpenChat = (groupId: string) => {
     setSelectedGroupId(groupId);
@@ -122,25 +102,58 @@ export default function MyGroupsList() {
   };
   
   // Handle leaving a group
-  const handleLeaveGroup = (groupId: string) => {
+  const handleLeaveGroup = async (groupId: string) => {
+    if (!currentUser) {
+      alert('You must be signed in to leave a group');
+      return;
+    }
+
     const confirmLeave = window.confirm('Are you sure you want to leave this group?');
     
     if (confirmLeave) {
-      // In a real app, this would make an API call to the backend
-      console.log(`Leaving group: ${groupId}`);
-      
-      // Update the local state by removing the group
-      setGroups(prevGroups => prevGroups.filter(group => group.id !== groupId));
-      
-      // If the group we're leaving is the selected group, close the chat
-      if (selectedGroupId === groupId) {
-        setSelectedGroupId(null);
+      try {
+        console.log(`Attempting to leave group: ${groupId} with user: ${currentUser}`);
+        
+        // Call the Firebase leaveGroup function
+        await leaveGroup(groupId, currentUser);
+        
+        console.log('Successfully left group, updating local state');
+        
+        // Update the local state by removing the group
+        setGroups(prevGroups => prevGroups.filter(group => group.id !== groupId));
+        
+        // If the group we're leaving is the selected group, close the chat
+        if (selectedGroupId === groupId) {
+          setSelectedGroupId(null);
+        }
+        
+        // Optionally show a success message
+        alert('Successfully left the group');
+        
+      } catch (error) {
+        console.error('Error leaving group:', error);
+        const errorMessage = error instanceof Error ? error.message : 'Failed to leave group. Please try again.';
+        alert(`Failed to leave group: ${errorMessage}`);
       }
     }
   };
   
+  // Refresh groups function
+  const refreshGroups = async () => {
+    if (!currentUser) return;
+    
+    try {
+      const fetchedGroups = await fetchGroupsByUID();
+      const uiGroups = (Array.isArray(fetchedGroups) ? fetchedGroups : [])
+        .map(convertToUIGroup);
+      setGroups(uiGroups);
+    } catch (error) {
+      console.error('Error refreshing groups:', error);
+    }
+  };
+  
   // The content to render
-  console.log("Length",groups.length);
+  console.log("Length", groups.length);
   const content = selectedGroup ? (
     // If a group is selected, show the chat interface
     <GroupChat 
@@ -149,7 +162,21 @@ export default function MyGroupsList() {
     />
   ) : loading ? (
     <div className="text-center p-6">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto mb-4"></div>
       <p>Loading your groups...</p>
+    </div>
+  ) : !currentUser ? (
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 text-center mb-8">
+      <h3 className="text-xl font-semibold mb-2">Please sign in</h3>
+      <p className="text-gray-600 dark:text-gray-400 mb-4">
+        You need to be signed in to view your study groups.
+      </p>
+      <a 
+        href="/login" 
+        className="px-4 py-2 bg-purple-600 text-white font-medium rounded-md hover:bg-purple-700 transition"
+      >
+        Sign In
+      </a>
     </div>
   ) : groups.length === 0 ? (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 text-center mb-8">
@@ -171,10 +198,26 @@ export default function MyGroupsList() {
           Create Group
         </a>
       </div>
+      <div className="mt-4">
+        <button 
+          onClick={refreshGroups}
+          className="text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300 text-sm"
+        >
+          Refresh
+        </button>
+      </div>
     </div>
   ) : (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold mb-4">Your Groups ({groups.length})</h2>
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-semibold">Your Groups ({groups.length})</h2>
+        <button 
+          onClick={refreshGroups}
+          className="text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300 text-sm"
+        >
+          Refresh
+        </button>
+      </div>
       <div className="space-y-4">
         {groups.map(group => (
           <MyGroupCard 

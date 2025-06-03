@@ -18,7 +18,7 @@ export default function Page() {
       <main className="flex flex-col md:flex-row justify-center items-center w-full max-w-6xl mx-auto px-4 py-12 flex-grow">
         {/* Text section */}
         <div className="md:w-1/2 p-6">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Study Group Finder</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Campus Library Seat Finder</h1>
           <p className="text-xl mb-6">
             Find study groups for your courses, or create your own to connect with classmates.
           </p>
