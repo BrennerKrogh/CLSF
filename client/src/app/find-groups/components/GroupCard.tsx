@@ -31,6 +31,15 @@ export default function GroupCard({ group, onGroupUpdate }: GroupCardProps) {
   
   const isFull = localGroup.joined >= localGroup.capacity;
   
+  const checkUserGroupStatus = async (userId: string) => {
+    try {
+      const isInGroup = await checkIfUserInGroup(localGroup.id, userId);
+      setIsUserInGroup(isInGroup);
+    } catch (error) {
+      console.error('Error checking user group status:', error);
+    }
+  };
+
   useEffect(() => {
     // Check if user is authenticated and get their ID
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -45,7 +54,7 @@ export default function GroupCard({ group, onGroupUpdate }: GroupCardProps) {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [checkUserGroupStatus]);
 
   useEffect(() => {
     setLocalGroup(group);
@@ -56,14 +65,7 @@ export default function GroupCard({ group, onGroupUpdate }: GroupCardProps) {
   }, [group, currentUser]);
 
   // Function to check if current user is in the group
-  const checkUserGroupStatus = async (userId: string) => {
-    try {
-      const isInGroup = await checkIfUserInGroup(localGroup.id, userId);
-      setIsUserInGroup(isInGroup);
-    } catch (error) {
-      console.error('Error checking user group status:', error);
-    }
-  };
+
 
   // Function to join a group
   const handleJoinGroup = async () => {

@@ -24,8 +24,12 @@ export default function LoginPage() {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       window.location.href = '/home';
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unknown error occurred.');
+      }
     } finally {
       setLoading(false);
     }
@@ -38,8 +42,12 @@ export default function LoginPage() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       window.location.href = '/home';
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unknown error occurred.');
+      }
       setShowReset(true);
     } finally {
       setLoading(false);

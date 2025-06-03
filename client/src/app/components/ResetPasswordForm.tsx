@@ -12,6 +12,7 @@ const ResetPasswordForm = () => {
       await resetPassword(email);
       setMessage('Password reset email sent.');
     } catch (err) {
+      console.error(err);
       setMessage('Failed to send reset email.');
     }
   };

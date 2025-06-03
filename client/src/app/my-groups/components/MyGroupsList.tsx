@@ -42,8 +42,21 @@ export default function MyGroupsList() {
     return () => unsubscribe();
   }, []);
 
-  // Convert Firebase group to UI group with mock data
-  const convertToUIGroup = (firebaseGroup: any): Group => {
+  // Firebase interface so we can have strict typing
+  interface FirebaseGroup {
+    id: string;
+    name: string;
+    description: string;
+    creator: string;
+    subject: string;
+    capacity: number;
+    joined: number;
+    location: string;
+    dateTime: string;
+    members?: string[];
+  }
+
+  const convertToUIGroup = (firebaseGroup: FirebaseGroup): Group => {
     // Generate mock next meeting (tomorrow at 2 PM)
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -81,7 +94,7 @@ export default function MyGroupsList() {
     };
 
     fetchGroups();
-  }, [currentUser]);
+  }, [currentUser, convertToUIGroup]);
 
   useEffect(() => {
     console.log("Updated Groups: ", groups);

@@ -38,7 +38,9 @@ export default function AccountProfile() {
   
   // Step 3: Use typed state
   const [profileData, setProfileData] = useState<Profile>(defaultProfileData);
-  const [loading, setLoading] = useState(true);
+
+  // State for loading, need to implement
+  //const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -58,7 +60,7 @@ export default function AccountProfile() {
           }
         );
       }
-      setLoading(false);
+      // setLoading(false);
     };
   
     fetchProfile();
@@ -94,8 +96,9 @@ export default function AccountProfile() {
       await deleteAccount();
       alert("Account deleted successfully.");
       window.location.href = "/login";
-    } catch (err: any) {
-      alert("Failed to delete account: " + err.message);
+    } catch (err) {
+      const errorMessage = (err instanceof Error) ? err.message : "An unknown error occurred";
+      alert("Failed to delete account: " + errorMessage);
     }
   };
 
@@ -105,8 +108,12 @@ export default function AccountProfile() {
       await signOut(auth);
       alert("Signed out successfully.");
       window.location.href = "/login";
-    } catch (err: any) {
+    } catch (err) {
+      if (err instanceof Error) {
       alert("Sign out failed: " + err.message);
+      } else {
+      alert("Sign out failed: An unknown error occurred.");
+      }
     }
   };
   
