@@ -7,10 +7,14 @@ import { useEffect } from 'react';
 import { auth, loadUserProfile, saveUserProfile } from '../../../firebase';
 import { deleteAccount } from '../../../firebase';
 import { signOut } from "firebase/auth";
+import { useSearchParams } from 'next/navigation';
 
 export default function AccountProfile() {
   // State for edit mode
-  const [isEditing, setIsEditing] = useState(false);
+
+  const searchParams = useSearchParams();
+  const startInEditMode = searchParams.get('edit') == 'true';
+  const [isEditing, setIsEditing] = useState(startInEditMode);
   
   // State for user profile data
   type Profile = {
@@ -24,18 +28,21 @@ export default function AccountProfile() {
     bio: string;
   };
   
+
+
   // Step 2: Default profile
   const defaultProfileData: Profile = {
     profilePicture: '/placeholder-avatar.png',
-    username: 'username',
-    name: 'John Pork',
-    major: 'Animal Studies',
-    schoolYear: 'Junior',
-    school: 'University of Listenbourg',
-    location: 'Listenbourg City, LG',
-    bio: 'Animal Studies major looking for help with Bird Studies 101 and Cat Economics 150',
+    username: '',
+    name: '',
+    major: '',
+    schoolYear: '',
+    school: '',
+    location: '',
+    bio: '',
   };
-  
+ 
+ 
   // Step 3: Use typed state
   const [profileData, setProfileData] = useState<Profile>(defaultProfileData);
   const [loading, setLoading] = useState(true);

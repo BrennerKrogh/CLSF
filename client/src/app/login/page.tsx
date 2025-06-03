@@ -23,7 +23,7 @@ export default function LoginPage() {
     setError('');
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      window.location.href = '/home';
+      window.location.href = '/account?edit=true';
     } catch (err: any) {
       setError(err.message);
     } finally {
