@@ -74,8 +74,13 @@ export default function GroupList({ searchFilters, shouldRefresh, onRefreshCompl
     try {
       setLoading(true);
       const fetchedGroups = await fetchAllGroups();
-      setAllGroups(fetchedGroups || []);
-      console.log('Loaded groups:', fetchedGroups);
+
+      // This is my current method way of not showing dead groups
+      // Pretty suboptimal, but I'd prefer to make a cleaning function on a real backend
+      const groupsWithMembers = (fetchedGroups || []).filter(group => group.members && group.members.length > 0);
+
+      setAllGroups(groupsWithMembers || []);
+      console.log('Loaded groups:', groupsWithMembers);
     } catch (error) {
       console.error('Error fetching groups:', error);
     } finally {
@@ -114,6 +119,7 @@ export default function GroupList({ searchFilters, shouldRefresh, onRefreshCompl
     );
     
     // Refresh after a short delay to ensure consistency
+    // Is this needed? -BK
     setTimeout(() => {
       loadGroups();
     }, 1000);
