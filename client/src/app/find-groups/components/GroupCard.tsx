@@ -43,7 +43,9 @@ export default function GroupCard({ group, onGroupUpdate }: GroupCardProps) {
     }
   };
 
-
+  // Fetch all member usernames when the group members change
+  // This will run when the component mounts and whenever localGroup.members changes
+  // This also means we can have automatic immediate update when joining a group!
   useEffect(() => {
     const fetchMemberUsernames = async () => {
       if (localGroup.members && localGroup.members.length > 0) {

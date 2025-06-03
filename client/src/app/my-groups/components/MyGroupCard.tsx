@@ -1,7 +1,8 @@
 // src/app/my-groups/components/MyGroupCard.tsx
 "use client";
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { getUsername } from '../../../firebase';
 
 // Use the same Group interface as MyGroupsList
 interface Group {
@@ -28,7 +29,27 @@ interface MyGroupCardProps {
 export default function MyGroupCard({ group, onOpenChat, onLeaveGroup }: MyGroupCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [memberUsernames, setMemberUsernames] = useState<string[]>([]);
   
+  // Basically the same exact function from find-groups
+  useEffect(() => {
+    const fetchMemberUsernames = async () => {
+      if (group.members && group.members.length > 0) {
+        try {
+          const usernames = await Promise.all(group.members.map((uid) => getUsername(uid)));
+          setMemberUsernames(usernames);
+        } catch (error) {
+          console.error('Error fetching member usernames:', error);
+          setMemberUsernames([]); // Fallback to an empty list
+        }
+      } else {
+        setMemberUsernames([]); // No members
+      }
+    };
+
+    fetchMemberUsernames();
+  }, [group.members]);
+
   const handleConfirmLeave = () => {
     onLeaveGroup(group.id);
     setShowConfirm(false);
@@ -131,6 +152,12 @@ export default function MyGroupCard({ group, onOpenChat, onLeaveGroup }: MyGroup
               {group.joined}/{group.capacity} members
             </p>
           </div>
+          { /* List of members */}
+          {memberUsernames.length > 0 && (
+          <div className="text-sm text-gray-500 dark:text-gray-400">
+            <span className="font-medium">Members:</span> {memberUsernames.join(', ')}
+          </div>
+        )}
         </div>
       )}
       
