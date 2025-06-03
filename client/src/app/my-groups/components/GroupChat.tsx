@@ -4,6 +4,9 @@ import { useState, useEffect, useRef } from 'react';
 import { ref, push, onValue } from "firebase/database";
 import { db } from "../../../firebase";
 
+import { auth, loadUserProfile } from '../../../firebase';
+import { User } from 'firebase/auth';
+
 interface Message {
   id: string;
   sender: string;
@@ -31,11 +34,50 @@ interface GroupChatProps {
   onBack: () => void;
 }
 
+
+
+
 export default function GroupChat({ group, onBack }: GroupChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+
+  const [username, setUsername] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+      const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
+          if (currentUser) {
+              setUser(currentUser);
+              try {
+                  // Try to load the user profile to get the username
+                  const profileData = await loadUserProfile(currentUser.uid);
+                  if (profileData && profileData.username && profileData.username !== 'username') {
+                      setUsername(profileData.username);
+                  } else {
+                      // Fallback to email if no username is set
+                      const emailUsername = currentUser.email?.split('@')[0] || 'User';
+                      setUsername(emailUsername);
+                  }
+              } catch (error) {
+                  console.error('Error loading user profile:', error);
+                  // Fallback to email username
+                  const emailUsername = currentUser.email?.split('@')[0] || 'User';
+                  setUsername(emailUsername);
+              }
+          } else {
+              setUsername('');
+              setUser(null);
+          }
+          setLoading(false);
+      });
+
+      return () => unsubscribe();
+  }, []);
+
 
   // Fetch messages from Realtime Database
   useEffect(() => {
@@ -88,7 +130,7 @@ export default function GroupChat({ group, onBack }: GroupChatProps) {
     if (newMessage.trim() === '') return;
 
     const message = {
-      sender: 'currentUser', // Replace with actual user ID or name
+      sender: username, // Replace with actual user ID or name
       content: newMessage,
       timestamp: new Date().toISOString(),
     };
@@ -145,22 +187,22 @@ export default function GroupChat({ group, onBack }: GroupChatProps) {
             {messages.map(message => (
               <div 
                 key={message.id} 
-                className={`flex ${message.sender === 'currentUser' ? 'justify-end' : 'justify-start'}`}
+                className={`flex ${message.sender === username ? 'justify-end' : 'justify-start'}`}
               >
                 <div 
                   className={`max-w-[80%] rounded-lg px-4 py-2 ${
-                    message.sender === 'currentUser' 
+                    message.sender === username 
                     ? 'bg-purple-600 text-white' 
                     : 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700'
                   }`}
                 >
-                  {message.sender !== 'currentUser' && (
+                  {message.sender !== username && (
                     <div className="font-semibold text-sm mb-1">{message.sender}</div>
                   )}
                   <p className="text-sm">{message.content}</p>
                   <div 
                     className={`text-xs mt-1 ${
-                      message.sender === 'currentUser' ? 'text-purple-200' : 'text-gray-500 dark:text-gray-400'
+                      message.sender === username ? 'text-purple-200' : 'text-gray-500 dark:text-gray-400'
                     }`}
                   >
                     {formatMessageDate(message.timestamp)}
