@@ -3,16 +3,30 @@
 
 import { useState } from 'react';
 
-export default function GroupSearch() {
-  const [searchTerm, setSearchTerm] = useState('');
+interface SearchFilters {
+  subject: string;
+  location: string;
+}
+
+interface GroupSearchProps {
+  onSearch: (filters: SearchFilters) => void;
+  onReset: () => void;
+}
+
+export default function GroupSearch({ onSearch, onReset }: GroupSearchProps) {
   const [subject, setSubject] = useState('');
   const [location, setLocation] = useState('');
   
-  // This function would typically trigger a search with the backend
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Search params:', { searchTerm, subject, location });
-    // Here you would fetch filtered results from your backend
+    console.log('Search params:', { subject, location });
+    onSearch({ subject, location });
+  };
+
+  const handleReset = () => {
+    setSubject('');
+    setLocation('');
+    onReset();
   };
   
   return (
@@ -21,67 +35,73 @@ export default function GroupSearch() {
       
       <form onSubmit={handleSearch} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Search input */}
-          <div className="col-span-1 md:col-span-3">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search by group name, course, or topic..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full p-3 pl-10 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800"
-              />
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
-                </svg>
-              </div>
-            </div>
-          </div>
-          
           {/* Subject/Course filter */}
           <div className="col-span-1">
+            <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Subject
+            </label>
             <select
+              id="subject"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800"
             >
               <option value="">All Subjects</option>
-              <option value="computer-science">Computer Science</option>
-              <option value="mathematics">Mathematics</option>
-              <option value="physics">Physics</option>
-              <option value="chemistry">Chemistry</option>
-              <option value="biology">Biology</option>
-              <option value="english">English</option>
-              <option value="history">History</option>
-              <option value="psychology">Psychology</option>
+              <option value="Computer Science">Computer Science</option>
+              <option value="Mathematics">Mathematics</option>
+              <option value="Physics">Physics</option>
+              <option value="Chemistry">Chemistry</option>
+              <option value="Biology">Biology</option>
+              <option value="English">English</option>
+              <option value="History">History</option>
+              <option value="Psychology">Psychology</option>
+              <option value="Engineering">Engineering</option>
+              <option value="Economics">Economics</option>
+              <option value="Art">Art</option>
+              <option value="Music">Music</option>
+              <option value="Philosophy">Philosophy</option>
+              <option value="Sociology">Sociology</option>
             </select>
           </div>
           
           {/* Location filter */}
           <div className="col-span-1">
+            <label htmlFor="location" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Location
+            </label>
             <select
+              id="location"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               className="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg dark:bg-gray-800"
             >
               <option value="">All Locations</option>
-              <option value="mchenry-library">McHenry Library</option>
-              <option value="science-library">Science & Engineering Library</option>
-              <option value="coffee-shops">Coffee Shops</option>
-              <option value="student-center">Student Center</option>
-              <option value="online">Online</option>
-              <option value="residence-halls">Residence Halls</option>
+              <option value="McHenry Library">McHenry Library</option>
+              <option value="Science & Engineering Library">Science & Engineering Library</option>
+              <option value="Coffee Shops">Coffee Shops</option>
+              <option value="Student Center">Student Center</option>
+              <option value="Online">Online</option>
+              <option value="Residence Halls">Residence Halls</option>
+              <option value="Study Rooms">Study Rooms</option>
+              <option value="Campus">Campus</option>
+              <option value="Off Campus">Off Campus</option>
             </select>
           </div>
           
-          {/* Search button */}
-          <div className="col-span-1">
+          {/* Action buttons */}
+          <div className="col-span-1 flex flex-col space-y-2">
             <button
               type="submit"
-              className="w-full p-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition"
+              className="flex-1 p-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition"
             >
               Search Groups
+            </button>
+            <button
+              type="button"
+              onClick={handleReset}
+              className="flex-1 p-3 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white font-medium rounded-lg transition"
+            >
+              Reset Filters
             </button>
           </div>
         </div>
