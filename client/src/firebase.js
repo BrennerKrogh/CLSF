@@ -1,14 +1,13 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, listUsers } from "firebase/auth";
 //import { getFirestore } from "firebase/firestore";
-import { getDatabase, ref,set} from "firebase/database";
+import { getDatabase, ref, set } from "firebase/database";
 import { get } from "firebase/database";
 //import { onAuthStateChanged } from "firebase/auth";
-import { sendPasswordResetEmail,onAuthStateChanged,setPersistence, browserLocalPersistence } from "firebase/auth";
+import { sendPasswordResetEmail, onAuthStateChanged, setPersistence, browserLocalPersistence } from "firebase/auth";
 //import { query, orderByChild, equalTo } from "firebase/database";
 import { deleteUser } from 'firebase/auth';
-
 
 const firebaseConfig = {
   apiKey: "AIzaSyCHRw0E0QyJdCKg3x6110qcCv6CN0aSpm0",
@@ -182,7 +181,10 @@ function resetPassword(email) {
 
 function saveUserProfile(uid, profileData) {
   const profileRef = ref(db, `users/${uid}/profile`);
-  return set(profileRef, profileData);
+  return set(profileRef, {
+    ...profileData,
+    email:profileData.email || auth.currentUser.email, // Ensure email is set);
+});
 }
 
 function loadUserProfile(uid) {
@@ -295,7 +297,7 @@ function joinGroup(groupId, userId) {
         }
         
         // Add user to members array and increment joined count
-        const updatedMembers = [...members, userId];
+        const updatedMembers = [...members, userId].filter((id) => id !== undefined);
         const updatedData = {
           ...groupData,
           members: updatedMembers,
@@ -437,6 +439,59 @@ async function getUsername(uid) {
   }
 }
 
+// Function in MyGroups that takes an email and groupID and if it belongs to a uid then add that uid to the list of members
+async function addUserToGroup(email, groupId) {
+  try {
+    // Find the user ID based on the provided email from the profile section in the database
+    const usersRef = ref(db, 'users');
+    const usersSnapshot = await get(usersRef);
+    
+    const usersData = usersSnapshot.val();
+    let userId = null;
+
+    // Search for the user with the matching email
+    for (const [uid, userProfile] of Object.entries(usersData)) {
+      if (userProfile.profile && userProfile.profile.email === email) {
+        userId = uid;
+        break;
+      }
+    }
+
+    if (!userId) {
+      throw new Error("No user found with the provided email");
+    }
+
+    const groupRef = ref(db, `studyGroups/${groupId}`);
+    const groupSnapshot = await get(groupRef);
+
+    if (groupSnapshot.exists()) {
+      const groupData = groupSnapshot.val();
+      const members = Array.isArray(groupData.members) ? groupData.members : [];
+
+      if (members.includes(userId)) {
+        console.log("User is already in this group");
+        return { id: groupId, ...groupData };
+      }
+
+      const updatedMembers = [...members, userId];
+      const updatedData = {
+        ...groupData,
+        members: updatedMembers,
+        joined: updatedMembers.length,
+      };
+
+      await set(groupRef, updatedData);
+      console.log("Successfully added user to group:", groupId);
+      return { id: groupId, ...updatedData };
+    } else {
+      throw new Error("Group not found");
+    }
+  } catch (error) {
+    console.error("Error adding user to group:", error);
+    throw error;
+  }
+}
+
 // Updated exports at the bottom of firebase.js to include these new functions:
 export { 
   app,
@@ -459,6 +514,7 @@ export {
   leaveGroup,
   getUserGroups,
   getUsername,
+  addUserToGroup,
 };
 
 export async function deleteAccount() {

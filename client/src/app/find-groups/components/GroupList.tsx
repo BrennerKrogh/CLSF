@@ -78,9 +78,9 @@ export default function GroupList({ searchFilters, shouldRefresh, onRefreshCompl
       // This is my current method way of not showing dead groups
       // Pretty suboptimal, but I'd prefer to make a cleaning function on a real backend
       const groupsWithMembers = (fetchedGroups || []).filter(group => group.members && group.members.length > 0);
-
-      setAllGroups(groupsWithMembers || []);
-      console.log('Loaded groups:', groupsWithMembers);
+      const publicGroups = (groupsWithMembers || []).filter(group => group.isPublic === true);
+      setAllGroups(publicGroups || []);
+      console.log('Loaded groups:', publicGroups);
     } catch (error) {
       console.error('Error fetching groups:', error);
     } finally {

@@ -2,7 +2,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { getUsername } from '../../../firebase';
+import { getUsername, auth, addUserToGroup } from '../../../firebase';
 
 // Use the same Group interface as MyGroupsList
 interface Group {
@@ -28,8 +28,23 @@ interface MyGroupCardProps {
 
 export default function MyGroupCard({ group, onOpenChat, onLeaveGroup }: MyGroupCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+
+  // Both are logic for showing confirmation to leave and for inviting via email
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showEmailInv, setShowEmailInv] = useState(false);
+
   const [memberUsernames, setMemberUsernames] = useState<string[]>([]);
+  const [currentUserIsOwner, setCurrentUserIsOwner] = useState(false);
+
+  // Why did I think that making the user email the creator was a good idea?
+  // This effect checks if the current user is the owner of the group -BK
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setCurrentUserIsOwner(group.creator === (user ? user.email : null));
+    });
+
+    return () => unsubscribe();
+  }, [group.creator]);
   
   // Basically the same exact function from find-groups
   useEffect(() => {
@@ -172,6 +187,7 @@ export default function MyGroupCard({ group, onOpenChat, onLeaveGroup }: MyGroup
         </div>
         
         {/* Action buttons */}
+
         <div className="flex space-x-2">
           {showConfirm ? (
             <div className="flex space-x-2 w-full">
@@ -196,7 +212,43 @@ export default function MyGroupCard({ group, onOpenChat, onLeaveGroup }: MyGroup
               >
                 Leave Group
               </button>
-              
+                {currentUserIsOwner && (
+                    <>
+                    {showEmailInv ? (
+                    <div className="flex items-center space-x-2">
+                      <input 
+                      type="text" 
+                      placeholder="Enter email to invite" 
+                      className="flex-1 px-3 py-1.5 border border-blue-300 text-blue-600 dark:border-blue-700 dark:text-blue-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                        const inputValue = (e.target as HTMLInputElement).value;
+                        console.log('Inviting if exists:', inputValue);
+
+
+
+                        addUserToGroup(inputValue,group.id) 
+                        setShowEmailInv(false); // Optionally hide the input after submission
+                        }
+                      }}
+                      />
+                      <button 
+                      onClick={() => setShowEmailInv(false)} 
+                      className="px-3 py-1.5 border border-gray-300 text-gray-600 dark:border-gray-600 dark:text-gray-400 rounded-md hover:bg-gray-50 dark:hover:bg-gray-900 transition text-sm"
+                      >
+                      Cancel
+                      </button>
+                    </div>
+                    ) : (
+                    <button 
+                      onClick={() => setShowEmailInv(true)} 
+                      className="px-3 py-1.5 border border-blue-300 text-blue-600 dark:border-blue-700 dark:text-blue-400 rounded-md hover:bg-blue-50 dark:hover:bg-blue-900 transition text-sm"
+                    >
+                      Invite
+                    </button>
+                    )}
+                    </>
+                )}
               <button 
                 onClick={() => onOpenChat(group.id)} 
                 className="px-3 py-1.5 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition text-sm flex items-center"

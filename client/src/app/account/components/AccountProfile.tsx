@@ -26,6 +26,8 @@ export default function AccountProfile() {
     school: string;
     location: string;
     bio: string;
+    email: string; // Email isn't catptured during account creation
+    // This will make things a lot easier -BK
   };
   
 
@@ -40,6 +42,7 @@ export default function AccountProfile() {
     school: '',
     location: '',
     bio: '',
+    email:'',
   };
  
  
@@ -53,18 +56,18 @@ export default function AccountProfile() {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         const data = await loadUserProfile(user.uid);
-        setProfileData(
-          data || {
-            profilePicture: '/placeholder-avatar.png',
-            username: 'username',
-            name: 'name',
-            major: 'major',
-            schoolYear: '2025',
-            school: 'UCSC',
-            location: 'Santa Cruz',
-            bio: 'Nice to meet you',
-          }
-        );
+        setProfileData({
+          ...data,
+          email: user.email || '', // Add the email from auth
+          profilePicture: data?.profilePicture || '/placeholder-avatar.png',
+          username: data?.username || 'username',
+          name: data?.name || 'name',
+          major: data?.major || 'major',
+          schoolYear: data?.schoolYear || '2025',
+          school: data?.school || 'UCSC',
+          location: data?.location || 'Santa Cruz',
+          bio: data?.bio || 'Nice to meet you',
+        });
       }
     });
   
@@ -285,7 +288,14 @@ export default function AccountProfile() {
               <p className="text-gray-900 dark:text-gray-100">{profileData.location}</p>
             )}
           </div>
-          
+          {/* Email */}
+          <div className="col-span-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Email
+            </label>
+            <p className="text-gray-900 dark:text-gray-100">{profileData.email}</p>
+          </div>
+
           {/* Bio - spans 2 columns */}
           <div className="col-span-2">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
