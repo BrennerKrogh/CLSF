@@ -8,8 +8,8 @@ import {
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 describe("User Profile Edit and Revert", () => {
-  const testEmail = "cjli0430@gmail.com";
-  const testPassword = "123456";
+  const testEmail = "testuser@gmail.com";
+  const testPassword = "testuser";
   let userId = null;
 
   it("signs in, edits profile, and reverts changes", async () => {
