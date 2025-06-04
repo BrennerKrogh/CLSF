@@ -1,1 +1,4 @@
-CLSF: Campus Library Seat Finder (subject to change)
+CLSF: Campus Library Seat Finder
+
+### Welcome to the CLSF Git repo
+To set up CLSF and use it. Install node and then clone this repository. Then, you should navigate to the /client directory and run npm install to install dependencies and then run npm run dev to test the product.
